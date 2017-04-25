@@ -1,26 +1,28 @@
 <template>
+    
     <ul class="nav navbar-nav navbar-right">
         <li v-if="loginState" 
             class="dropdown" 
             :class="{open: isDropdownOpen}"
             @click="toggleMenu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                <img class="avatar" :src="currentUser.photoURL"/>{{currentUser.displayName}} <span class="caret"></span>
+                <img class="avatar" :src="currentUser.photoURL"/>{{currentUser.displayName}} <span class="caret dropdown-toggle-item"></span>
             </a>
             <ul class="dropdown-menu">
+                <li><router-link to="/company" tag="a" exact>Company details</router-link></li>
                 <li><a @click="handleSignOut">sign out</a></li>
             </ul>
         </li>
-        <logon-button v-if="!loginState"></logon-button>
         
     </ul>
+    
 </template>
 <script>
     
-    import logon from '../logon/LoginButton.vue'
-    import logout from '../logon/logout'
-    //import {mapActions} from 'vuex'
     
+    import logout from '../logon/logout'
+    import {mapActions} from 'vuex'
+
     export default {
         data() {
             return {
@@ -33,28 +35,34 @@
                 return this.$store.getters.user
             }
         },
-        components: {
-            logonButton: logon
-        },
+    
         methods:{
+            ...mapActions([
+                'setUser',
+                'setExpenses2',
+                
+            ]),
             handleSignOut(){
+                
                 logout()
+                
+                //reset store, incase a diff user logged in on the same browser  / machine
+                
+
+                this.$router.push({name: 'logon'});
+                
             },
-            toggleMenu(){
-                console.log('toggle');
+            toggleMenu(e){
+                e.stopPropagation();
                 this.isDropdownOpen = !this.isDropdownOpen
             }   
         },
         created(){
-            const link = document.querySelector('.myclass');
-            const test = document.getElementById("myclass");
-            
-            //link.addEventListener("click", toggleMenu, false);
-            
-            if (test) {
-                test.addEventListener("click", this.toggleMenu, false);
-  
-            };
+            var that = this;
+            document.addEventListener("click", function(e){
+                e.stopPropagation();
+                e.target.classList.contains('dropdown') ?  that.isDropdownOpen = true : that.isDropdownOpen = false
+            });
         }
     }
 </script>

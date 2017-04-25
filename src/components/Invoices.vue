@@ -1,22 +1,22 @@
 <template>
     <div>
-        <h2>Expenses</h2>
+        
+
+        <h2>Invoices</h2>
         <div class="row">
             <div class="col-xs-12">
-                <app-add-expenses :user="user"></app-add-expenses>
+                <app-add-invoices :user="user"></app-add-invoices>
             </div>
         </div>
-        
         <div class="row">
             <div class="col-xs-12">                
-                <app-expense-filters :isFiltered="isFiltered"></app-expense-filters>
+                <app-invoice-filters :isInvoicesFiltered="isInvoicesFiltered"></app-invoice-filters>
             </div>
         </div>
-
         <div>
-            <app-expenses-table :user="user"></app-expenses-table>
+            <app-invoices :user="user"></app-invoices>
         </div>
-       
+
         
     </div>
 </template>
@@ -26,12 +26,11 @@
     import {config} from './firebase/config.js'
     
     import logon from './logon/LoginButton.vue'
-   
-    import addExpenses from './expenses/AddExpense.vue'
-    import expenseFilters from './expenses/ExpenseFilters.vue'
-    import expenses from './expenses/Expenses.vue'
     
-    
+    import invoiceFilters from './invoices/InvoicesFilters.vue'
+    import addInvoices from './invoices/AddInvoice.vue'
+    import invoices from './invoices/Invoices.vue'
+
     export default {
         data() {
             return {
@@ -43,16 +42,17 @@
             user() {
                 return this.$store.getters.user
             },
-            isFiltered(){
-                return this.$store.getters.expensesFilterActive;
+            
+            isInvoicesFiltered(){
+                return this.$store.getters.invoicesFilterActive;
             },
+            
         },
         
-        components: {
-            appAddExpenses: addExpenses,
-            appExpenseFilters: expenseFilters,
-            appExpensesTable: expenses,
-            
+        components: {            
+            appInvoiceFilters: invoiceFilters,
+            appAddInvoices: addInvoices,
+            appInvoices: invoices,
         }
     }
 </script>

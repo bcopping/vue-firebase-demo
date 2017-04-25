@@ -14,7 +14,13 @@
 <script>
 
 export default {
-        
+        computed: {
+            
+        },
+        created(){
+            
+            
+        }
     }
 </script>
 

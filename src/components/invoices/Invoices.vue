@@ -1,0 +1,157 @@
+<template>
+    <div>
+      
+      <select @change="setYear" v-model="selected">
+        <option v-for="year in tradingYearsArry" v-bind:value="year">Year {{year}}</option>
+        <option value="all">Show All</option>
+      </select>
+
+      <el-table :data="tableData" empty-text="No data to display" :default-sort = "{prop: 'date', order: 'descending'}" style="width: 100%">
+        <el-table-column width="40">
+          <template scope="scope">
+            <a her="#" @click="handleDelete(scope.$index, scope.row)">X</a>
+          </template>
+        </el-table-column>
+        <el-table-column prop="invNum" label="#" width="30">
+        </el-table-column>
+        <el-table-column prop="date" label="Date" width="100">
+        </el-table-column>
+        <el-table-column prop="company" label="Company" width="120">
+        </el-table-column>
+        <el-table-column prop="invoiceDescription" label="Description">
+        </el-table-column>
+        <el-table-column align="right" prop="amountVAT" label="Amt (Inc VAT)" :formatter="formatter" sortable width="150">
+        </el-table-column>
+        
+      </el-table>
+      <br /><br />
+      <div style="float:right;width:230px;">
+        <h4>Total exc VAT <b style="float:right">{{invoiceAmountsAry | currency('£')}}</b></h4> 
+        <h4>Total inc VAT <b style="float:right">{{invoiceAmountsVATAry | currency('£')}}</b></h4>
+      </div>
+      <br clear="all" />
+      <app-csv-download :data="tableData" :filename="csvTitle"></app-csv-download>
+    
+    </div>
+  </template>
+
+  <script>
+    import * as firebase from 'firebase';
+    import {mapActions} from 'vuex'
+    import accounting from 'accounting'
+    import {addDecimals} from '../../lib/decimal-operations'
+    import csvDownload from '../csvdownloader/csvDownload.vue'
+    import getInvoices from '../mixins'
+    
+
+    export default {
+      data() {
+        return {
+          csvTitle: "invoices",
+          selected: this.$store.getters.totalYearsTrading
+        }
+      },
+      mixins: [getInvoices],
+    
+      components: {
+            appCsvDownload: csvDownload
+      },
+      computed: {
+          tableData(){
+                console.log(this.$store.getters.invoicesTradingYearActive)
+                
+                if (this.$store.getters.invoicesFilterActive) {
+                  
+                  return this.$store.getters.invoicesFiltered
+                }
+                
+                if (this.$store.getters.invoicesTradingYearActive) {
+                  
+                  return this.$store.getters.invoicesTradingYear
+                }
+
+                else {
+                  
+                  return this.$store.getters.invoices
+                }
+                
+            },
+            invoiceAmountsAry(){
+                let sum = 0;
+                if (this.$store.getters.invoicesFilterActive) {
+                    
+                    sum = this.$store.getters.filteredInvoiceAmountsAry;
+                }
+                if (this.$store.getters.invoicesTradingYearActive) {
+                    sum = this.$store.getters.tradingYearInvoiceAmountsAry;
+                }
+                else {
+                    sum = sum = this.$store.getters.invoiceAmountsAry;
+                }
+                return addDecimals(sum).toFixed(2);
+            },
+            invoiceAmountsVATAry(){
+                let sum = 0;
+                if (this.$store.getters.invoicesFilterActive) {
+                    
+                    sum = this.$store.getters.filteredInvoiceAmountsVATAry;
+                }
+                if (this.$store.getters.invoicesTradingYearActive) {
+                    sum = this.$store.getters.tradingYearInvoiceAmountsVATAry;
+                }
+                else {
+                    sum = sum = this.$store.getters.invoiceAmountsVATAry;
+                }
+                return addDecimals(sum).toFixed(2);
+            },
+            totalYearsTrading(){
+               return this.$store.getters.totalYearsTrading
+            },
+            tradingYearsArry(){
+               return this.$store.getters.tradingYearsArry
+            }
+
+      },
+      methods:{
+          ...mapActions([    
+                'removeFilterInvoices',
+                'filterTradingYear',
+                'setInvoiceCompanies',
+                'showAllYears'
+            ]),
+          //format the amounts row...
+          formatter(row, column){
+              var value = row.amountVAT
+              var c = '£'
+              return accounting.formatMoney(value, c);
+          },
+          handleDelete(index, row){
+            firebase.database().ref('users/'+ this.user.uid).child('/invoices/').child(row.id).remove();
+            this.removeFilterInvoices();
+            this.getInvoices();
+          },
+          csvDownload(){
+            downloadCSV({ filename: "dividends.csv", data: this.tableData });
+          },
+          setYear(e){
+            
+            if (e.target.value == 'all') {
+              this.removeFilterInvoices();
+              this.showAllYears();
+              this.setInvoiceCompanies();
+            }  
+            else {
+              this.removeFilterInvoices();
+              this.filterTradingYear(e.target.value);
+              this.setInvoiceCompanies();
+            }
+            
+          
+        
+          },
+      },
+      created() {
+        this.filterTradingYear(this.totalYearsTrading)
+      }
+    }
+  </script>

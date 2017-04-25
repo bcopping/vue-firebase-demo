@@ -1,9 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import stocks from './modules/stocks'
 import login from './modules/login'
 import expenses from './modules/expenses'
+import wages from './modules/wages'
+import dividends from './modules/dividends'
+import invoices from './modules/invoices'
+import people from './modules/people'
+import companyInformation from './modules/companyInformation'
 
 import * as actions from './actions'
 import * as getters from './getters'
@@ -19,8 +23,12 @@ export const store = new Vuex.Store({
     getters,
     mutations,
     modules: {
-        stocks,
         login,
-        expenses
+        expenses,
+        wages,
+        dividends,
+        invoices,
+        people,
+        companyInformation
     }
 });

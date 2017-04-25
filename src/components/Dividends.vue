@@ -1,22 +1,18 @@
 <template>
     <div>
-        <h2>Expenses</h2>
+        
+        <h2>Dividends</h2>
         <div class="row">
             <div class="col-xs-12">
-                <app-add-expenses :user="user"></app-add-expenses>
+                <app-add-dividends :user="user"></app-add-dividends>
             </div>
         </div>
-        
         <div class="row">
             <div class="col-xs-12">                
-                <app-expense-filters :isFiltered="isFiltered"></app-expense-filters>
+                <app-dividend-filters :isDividendsFiltered="isDividendsFiltered"></app-dividend-filters>
             </div>
         </div>
-
-        <div>
-            <app-expenses-table :user="user"></app-expenses-table>
-        </div>
-       
+        <app-dividends :user="user"></app-dividends>
         
     </div>
 </template>
@@ -27,11 +23,10 @@
     
     import logon from './logon/LoginButton.vue'
    
-    import addExpenses from './expenses/AddExpense.vue'
-    import expenseFilters from './expenses/ExpenseFilters.vue'
-    import expenses from './expenses/Expenses.vue'
-    
-    
+    import addDividends from './dividends/AddDividend.vue'
+    import dividendFilters from './dividends/DividendsFilters.vue'
+    import dividends from './dividends/Dividends.vue'
+ 
     export default {
         data() {
             return {
@@ -43,17 +38,21 @@
             user() {
                 return this.$store.getters.user
             },
-            isFiltered(){
-                return this.$store.getters.expensesFilterActive;
+            
+            isDividendsFiltered(){
+                return this.$store.getters.dividendsFilterActive;
             },
+        
         },
         
         components: {
-            appAddExpenses: addExpenses,
-            appExpenseFilters: expenseFilters,
-            appExpensesTable: expenses,
             
-        }
+            appAddDividends: addDividends,
+            appDividendFilters: dividendFilters,
+            appDividends: dividends,
+            
+        },
+        
     }
 </script>
 <style>

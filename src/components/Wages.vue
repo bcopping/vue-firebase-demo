@@ -1,22 +1,22 @@
 <template>
     <div>
-        <h2>Expenses</h2>
+        
+        <h2>Wages</h2>
         <div class="row">
             <div class="col-xs-12">
-                <app-add-expenses :user="user"></app-add-expenses>
+                <app-add-wages :user="user"></app-add-wages>
+            </div>  
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">                
+                <app-wage-filters :isWagesFiltered="isWagesFiltered"></app-wage-filters>
             </div>
         </div>
         
-        <div class="row">
-            <div class="col-xs-12">                
-                <app-expense-filters :isFiltered="isFiltered"></app-expense-filters>
-            </div>
-        </div>
-
-        <div>
-            <app-expenses-table :user="user"></app-expenses-table>
-        </div>
-       
+        <app-wages :user="user"></app-wages>
+        <hr />
         
     </div>
 </template>
@@ -27,9 +27,11 @@
     
     import logon from './logon/LoginButton.vue'
    
-    import addExpenses from './expenses/AddExpense.vue'
-    import expenseFilters from './expenses/ExpenseFilters.vue'
-    import expenses from './expenses/Expenses.vue'
+    
+    
+    import addWages from './wages/AddWage.vue'
+    import wageFilters from './wages/WagesFilters.vue'
+    import wages from './wages/Wages.vue'
     
     
     export default {
@@ -43,15 +45,22 @@
             user() {
                 return this.$store.getters.user
             },
-            isFiltered(){
-                return this.$store.getters.expensesFilterActive;
+            
+            isWagesFiltered(){
+                return this.$store.getters.wagesFilterActive;
             },
+            
+            
         },
         
         components: {
-            appAddExpenses: addExpenses,
-            appExpenseFilters: expenseFilters,
-            appExpensesTable: expenses,
+            appAddWages: addWages,
+            appWageFilters: wageFilters,
+            appWages: wages,
+            
+        },
+        
+        created() {
             
         }
     }

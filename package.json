@@ -1,7 +1,7 @@
 {
-  "name": "vue-cli",
-  "description": "A Vue.js project",
-  "author": "Maximilian Schwarzmüller <mblacky0@gmail.com>",
+  "name": "bjc-accounts",
+  "description": "",
+  "author": "Ben Copping (ben@bjcdesign.com)",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --inline --hot",
@@ -11,6 +11,7 @@
     "accounting": "^0.4.1",
     "babel-preset-stage-2": "^6.22.0",
     "bootstrap": "^3.3.7",
+    "element-ui": "^1.2.7",
     "firebase": "^3.7.1",
     "lodash": "^4.17.4",
     "vue": "^2.0.1",
@@ -28,6 +29,7 @@
     "cross-env": "^3.0.0",
     "css-loader": "^0.25.0",
     "file-loader": "^0.9.0",
+    "style-loader": "^0.16.1",
     "vue-loader": "^9.7.0",
     "webpack": "2.1.0-beta.25",
     "webpack-dev-server": "2.1.0-beta.0"

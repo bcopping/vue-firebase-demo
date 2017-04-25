@@ -1,196 +1,149 @@
 <template>
-    <div class="row">
-        
-        <div v-if="loginState" class="col-xs-12">
-            <h1>Expenses</h1>
-            <hr>
-            <form class="form-inline"  v-on:submit.prevent>
-                <div class="form-group">
-                    <label>Type</label>
-            
-                    <input class="form-control newExpenseInput" :class="{ visible: addExpenseType}" type="text" v-model="newExpenseType" ref="newExpenseInput">
-                    
-                    <select class="form-control" v-show="!addExpenseType" @change="expenseSelectHandler" >
-                        <option disabled selected>Select type of expense</option>
-                        <option v-for="expense in expenseTypes">{{expense}}</option>
-                        <option value="addNew">Add a new type of expense</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Name</label>
-                    <input class="form-control " v-model="expenseName" type="text" />
-                </div>
-                <div class="form-group">
-                    <label>Amount</label>
-                    <input class="form-control" v-model="expenseAmount" type="number" />
-                </div>
-                <button @click="addExpense" class="btn btn-default">Add expense</button>
-                <button @click="addExpense2" class="btn btn-default">Add expense 2</button>
-            </form>
-            <hr>
-            
-                
-            
-            
-            
-        </div>
-        <div class="col-xs-12">
-            <div v-for="(expenseType, i) in expenseTypes">
-                <!-- pass the expenseType in as a prop we can use to section out the expenses-->
-                <app-expenses :expenseType="expenseType" :user="user"></app-expenses>
+    <div>
+        <h2>Expenses</h2>
+        <div class="row">
+            <div class="col-xs-12">
+                <app-add-expenses></app-add-expenses>
             </div>
-            total expenses {{expensesSum | currency('£')}}
         </div>
-        <br>
-        <hr>
-        <app-expenses2 :user="user"></app-expenses2>        
         
+        <div class="row">
+            <div class="col-xs-12">                
+                <app-expense-filters :isFiltered="isFiltered"></app-expense-filters>
+            </div>
+        </div>
+
+        <div>
+            <app-expenses></app-expenses>
+        </div>
+       
+        <hr>
+
+        <h2>Wages</h2>
+        <div class="row">
+            <div class="col-xs-12">
+                <app-add-wages></app-add-wages>
+            </div>  
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">                
+                <app-wage-filters :isWagesFiltered="isWagesFiltered"></app-wage-filters>
+            </div>
+        </div>
+        
+        <app-wages></app-wages>
+        <hr />
+        <h2>Dividends</h2>
+        <div class="row">
+            <div class="col-xs-12">
+                <app-add-dividends></app-add-dividends>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">                
+                <app-dividend-filters :isDividendsFiltered="isDividendsFiltered"></app-dividend-filters>
+            </div>
+        </div>
+        <app-dividends ></app-dividends>
+        
+
+        <h2>Invoices</h2>
+        <div class="row">
+            <div class="col-xs-12">
+                <app-add-invoices></app-add-invoices>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">                
+                <app-invoice-filters :isInvoicesFiltered="isInvoicesFiltered"></app-invoice-filters>
+            </div>
+        </div>
+        <div>
+            <app-invoices></app-invoices>
+        </div>
+
+        <h2>People</h2>
+        <div class="row">
+            <div class="col-xs-12">
+                <app-add-company-person></app-add-company-person>
+            </div>
+        </div>
+        <app-company-person-select></app-company-person-select>
     </div>
 </template>
 
 <script>
-    import * as firebase from 'firebase';
    
     import {config} from './firebase/config.js'
     
     import logon from './logon/LoginButton.vue'
-    import expenses from './Expenses.vue'
-    import expenses2 from './Expenses2.vue'
-
-    import getExpenses2 from './mixins'
-
-    import {addDecimals} from '../lib/decimal-operations'
+   
+    import addExpenses from './expenses/AddExpense.vue'
+    import expenseFilters from './expenses/ExpenseFilters.vue'
+    import expenses from './expenses/Expenses.vue'
     
-    import {mapActions} from 'vuex'
+    import addWages from './wages/AddWage.vue'
+    import wageFilters from './wages/WagesFilters.vue'
+    import wages from './wages/Wages.vue'
+    
+    
+    import addDividends from './dividends/AddDividend.vue'
+    import dividendFilters from './dividends/DividendsFilters.vue'
+    import dividends from './dividends/Dividends.vue'
 
-    const db = firebase.database();
-
-    let users = db.ref('users');
+    import invoiceFilters from './invoices/InvoicesFilters.vue'
+    import addInvoices from './invoices/AddInvoice.vue'
+    import invoices from './invoices/Invoices.vue'
+    
+    import addPerson from './people/AddCompanyPerson.vue'
+    import companyPersonSelect from './people/CompanyPersonSelect.vue'
     
     export default {
         data() {
             return {
-                expenseName : '',
-                expenseAmount: 0,
-                addExpenseType: false,
-                newExpenseType: ''
+              
             }
         },
-        mixins: [getExpenses2],
+        
         computed: {
-            loginState() {
-                return this.$store.getters.login
+            
+            isFiltered(){
+                return this.$store.getters.expensesFilterActive;
             },
-            user() {
-                return this.$store.getters.user
+            isWagesFiltered(){
+                return this.$store.getters.wagesFilterActive;
             },
-            expensesSum(){
-                const sum = [];
-                const expenses = this.userexpenses
-                for (let i = expenses.length; !!i--;){
-                    sum.push(expenses[i].amount);
-                }
-                
-                return addDecimals(sum).toFixed(2);
+            isDividendsFiltered(){
+                return this.$store.getters.dividendsFilterActive;
             },
-            expenseTypes() {
-                return this.$store.getters.expenseTypes
-            }
-               
+            isInvoicesFiltered(){
+                return this.$store.getters.invoicesFilterActive;
+            },
+            
         },
         
         components: {
-            logonButton : logon,
+            appAddExpenses: addExpenses,
+            appExpenseFilters: expenseFilters,
             appExpenses: expenses,
-            appExpenses2: expenses2
+            appAddWages: addWages,
+            appWageFilters: wageFilters,
+            appWages: wages,
+            appAddDividends: addDividends,
+            appDividendFilters: dividendFilters,
+            appDividends: dividends,
+            appInvoiceFilters: invoiceFilters,
+            appAddInvoices: addInvoices,
+            appInvoices: invoices,
+            appAddCompanyPerson: addPerson,
+            appCompanyPersonSelect: companyPersonSelect,
+            
         },
         
-        firebase: () => {
-            return {
-                users: {
-                    source: users,
-                    // optionally bind as an object
-                    asObject: true,
-                    // optionally provide the cancelCallback
-                    cancelCallback: function () {}
-                },
-                userexpenses: {
-                    source: users.child(firebase.auth().currentUser.uid).child('expenses')
-                } 
-            }
-        },
-              
-        methods:{
-            ...mapActions([
-                'setExpenses',
-                'setExpenses2',
-                
-            ]),
-            expenseSelectHandler(e){
-                if(e.target.value === 'addNew') {
-                    this.addExpenseType = true;
-                    this.$refs.newExpenseInput.focus();
-                }
-                else {                    
-                    this.addExpenseType = false;
-                    this.newExpenseType = e.target.value
-                }
-            },
-            
-            
-            addExpense(){
-                
-                const ref = firebase.database().ref('users/'+ this.user.uid).child('/expenses/')
-                
-                ref.child(this.newExpenseType).push({
-                    name: this.expenseName,
-                    amount: this.expenseAmount
-                });
-                
-                this.addExpenseType = false;
-                this.getExpenses();
-                
-            },
-            addExpense2(){
-                
-                const ref = firebase.database().ref('users/'+ this.user.uid).child('/expenses2/').push().key;
-                //var key = ref.key
-                console.log(ref);
-                
-                var newData = {
-                    type:this.newExpenseType,
-                    name: this.expenseName,
-                    amount: this.expenseAmount,
-                    id: ref
-                };
-                //ref.push(newData)
-
-
-                firebase.database().ref('users/'+ this.user.uid).child('/expenses2/').child(ref).set(newData);
-                
-                
-                this.addExpenseType = false;
-                //this.getExpenses2();
-                this.getExpenses2();
-            },
-            getExpenses() {
-                const that = this;
-                const ref = firebase.database().ref('users/'+ this.user.uid).child('/expenses/')
-                
-                ref.once("value")
-                .then(function(snapshot) {
-                    var payload = snapshot.val();
-                    //set the store with expenses
-                    that.setExpenses(payload);
-                });
-
-            },
-           
-        },
         created() {
-            this.getExpenses()
             
-            this.getExpenses2();
         }
     }
 </script>
