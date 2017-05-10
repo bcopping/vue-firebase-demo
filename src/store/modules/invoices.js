@@ -14,7 +14,7 @@ const state = {
 };
 
 const mutations = {
-    
+
     'SET_INVOICES' (state, payload) {
         state.invoices = payload;
        
@@ -29,7 +29,7 @@ const mutations = {
         
         state.invoicesFilterActive = true;
     },
-    'FILTER_TRADING_YEAR'(state, payload){
+    'FILTER_INVOICE_TRADING_YEAR'(state, payload){
         state.invoicesTradingYear = _.filter(state.invoices, {tradingYear: Number(payload)}); 
         state.invoicesTradingYearActive = true;
         state.invoicesViewingTradingYear = payload;
@@ -40,7 +40,7 @@ const mutations = {
         state.invoicesFiltered = [];
         state.invoicesFilterActive = false;
     },
-    'SHOW_ALL_YEARS'(state){
+    'SHOW_ALL_INVOICES'(state){
         state.invoicesTradingYearActive = false;
     },
     //gets the invoice companies and number of items in each type
@@ -101,8 +101,8 @@ const actions = {
     setInvoices: ({commit}, payload) => {
         commit('SET_INVOICES', payload);
     },
-    filterTradingYear: ({commit}, payload) => {
-        commit('FILTER_TRADING_YEAR', payload)
+    filterInvoiceTradingYear: ({commit}, payload) => {
+        commit('FILTER_INVOICE_TRADING_YEAR', payload)
     },
     filterByInvoiceCompany: ({commit}, payload) => {
         commit('FILTER_INVOICE_COMPANY', payload)
@@ -114,8 +114,8 @@ const actions = {
         console.log('set inv companies');
         commit('SET_INVOICE_COMPANIES')
     },
-    showAllYears: ({commit}, payload) => {
-        commit('SHOW_ALL_YEARS')
+    showAllInvoices: ({commit}, payload) => {
+        commit('SHOW_ALL_INVOICES')
     }
 };
 
