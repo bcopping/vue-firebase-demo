@@ -83,7 +83,8 @@
                 return this.$store.getters.invoicesCompanies
             },
             invoiceAmountVAT(){
-                return this.invoiceAmount*(1+(this.$store.getters.VATRate/100)).toFixed(2);
+                let n = this.invoiceAmount*(1+(this.$store.getters.VATRate/100));
+                return Number(n).toFixed(2);
             },
             companies() {
                 return this.$store.getters.companies
@@ -109,14 +110,14 @@
                 this.getTradingYear(this.$refs.setDate.displayValue)
 
                 const db = firebase.database().ref('users/'+ this.user.uid).child('/invoices/');
-                const ref = db.push().key;
+                const id = db.push().key;
                 //hide the set new type of expense input field
-                let name = '';
+                let company = '';
                 if(this.addCompanyName){
-                    name = this.newCompanyName
+                    company = this.newCompanyName
                 }
                 else {
-                    name = this.newCompanyNameSet              
+                    company = this.newCompanyNameSet              
                 }
                 
                 //get data ready to set in our firebase db ref
@@ -125,18 +126,18 @@
                 var timestamp = Date.now();
                 
                 var newData = {
-                    id: ref,
-                    timestamp: timestamp,
+                    id,
+                    timestamp,
                     date: this.$refs.setDate.displayValue,
                     invNum: this.invNum,
-                    company: name,
+                    company,
                     invoiceDescription: this.invoiceDescription,
                     amount: this.invoiceAmount,
                     amountVAT: this.invoiceAmountVAT,
                     tradingYear: this.$store.getters.tradingYear
                 };
                 
-                db.child(ref).set(newData);
+                db.child(id).set(newData);
                
                 this.getInvoices();
                 this.removeFilterInvoices();
