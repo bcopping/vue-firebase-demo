@@ -1,5 +1,6 @@
 <template>
     <div>
+      <app-trading-year :yearFor="csvTitle"></app-trading-year>
       <el-table :data="tableData" empty-text="No data to display" :default-sort = "{prop: 'date', order: 'descending'}" style="width: 100%">
         <el-table-column prop="date" label="Date" width="180">
         </el-table-column>
@@ -33,8 +34,9 @@
     import accounting from 'accounting'
     import {addDecimals} from '../../lib/decimal-operations'
     import csvDownload from '../csvdownloader/csvDownload.vue'
-    
     import getWages from '../mixins'
+    import selectTradingYear from '../tradingYear/selectTradingYear.vue'
+    
     
 
     export default {
@@ -46,16 +48,22 @@
       mixins: [getWages],
       
       components: {
-            appCsvDownload: csvDownload
+            appCsvDownload: csvDownload,
+            appTradingYear: selectTradingYear
       },
       computed: {
           
           tableData(){
                if (this.$store.getters.wagesFilterActive) {
+                    
                     return this.$store.getters.wagesFiltered
                 }
-
+                if (this.$store.getters.wagesTradingYearActive) {
+                  
+                  return this.$store.getters.wagesTradingYear
+                }
                 else {
+                  
                   return this.$store.getters.wages
                 }
                 
@@ -70,11 +78,15 @@
                     sum = sum = this.$store.getters.wageAmountsAry;
                 }
                 return addDecimals(sum).toFixed(2);
-            } 
+            },
+            totalYearsTrading(){
+              return this.$store.getters.totalYearsTrading
+            },
       },
       methods:{
           ...mapActions([    
-                'removeFilterWages'
+                'removeFilterWages',
+                'filterWagesTradingYear'
             ]),
           //format the amounts row...
           formatter(row, column){
@@ -90,6 +102,9 @@
           csvDownload(){
             downloadCSV({ filename: "wages.csv", data: this.tableData });
           }
-      }
+      },
+      created(){
+          this.filterWagesTradingYear(this.totalYearsTrading)
+       }
     }
   </script>

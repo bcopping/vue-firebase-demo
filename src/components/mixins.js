@@ -26,6 +26,7 @@ module.exports= {
                 'setTotalYearsTrading',
                 'filterInvoiceTradingYear',
                 'filterDividendTradingYear',
+                'filterWagesTradingYear',
                 'setTradingYearArray'
             ]),
         
@@ -67,6 +68,9 @@ module.exports= {
 
 
               that.setWages(wages);
+              if (that.$store.getters.wagesTradingYearActive) {
+                that.filterWagesTradingYear(that.$store.getters.wagesViewingTradingYear)
+              }
               that.setEmployeeNames(wages);
           });
         },

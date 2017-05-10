@@ -30,6 +30,10 @@ export default {
             'filterDividendTradingYear',
             'setDividendNames',
             'showAllDividends',
+            'removeFilterWages',
+            'filterWagesTradingYear',
+            'setEmployeeNames',
+            'showAllWages',
         ]),
         setYear(e){
             switch (this.yearFor) {
@@ -44,7 +48,9 @@ export default {
                     this.setDividendNames();  
                     break;
                 case 'wages':
-                
+                    this.removeFilterWages();
+                    e.target.value == 'all' ?  this.showAllWages() : this.filterWagesTradingYear(e.target.value)
+                    this.setEmployeeNames();  
                     break;
                 case 'expenses':
                 

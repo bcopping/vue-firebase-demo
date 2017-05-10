@@ -56,6 +56,7 @@
     import {mapActions} from 'vuex'
     import addCompanyPerson from '../people/AddCompanyPerson.vue'
     import companyPersonSelect from '../people/CompanyPersonSelect.vue'
+    import getTradingYear from '../mixins'
     
     export default {
         data() {
@@ -106,6 +107,10 @@
                 }
             },
             addWage(){
+                //we set which trading year the invoice goes in
+                this.getTradingYear(this.$refs.setDate.displayValue)
+
+
                 const db = firebase.database().ref('users/'+ this.user.uid).child('/wages/');
                 const ref = db.push().key;
                 //hide the set new type of expense input field
@@ -121,7 +126,8 @@
                     wage: this.wageAmount,
                     id: ref,
                     timestamp: timestamp,
-                    date: this.$refs.setDate.displayValue
+                    date: this.$refs.setDate.displayValue,
+                    tradingYear: this.$store.getters.tradingYear
                 };
                 
                 db.child(ref).set(newData);
