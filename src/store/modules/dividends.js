@@ -7,6 +7,9 @@ const state = {
     dividendsFiltered: [],
     dividendNames: [],
     dividendsFilterActive: false,
+    dividendsTradingYear: [],
+    dividendsTradingYearActive: false,
+    dividendsViewingTradingYear: ''
 };
 
 const mutations = {
@@ -15,17 +18,30 @@ const mutations = {
         state.dividends = payload;
        
     },
-    'SET_FILTERED_DIVIDENDS' (state, payload) {
-        state.dividendsFiltered.push(payload);
-        _.orderBy(state.dividendsFiltered, 'timestamp', ['desc']);
-    },
     'FILTER_DIVIDEND_NAME'(state, payload){
-        state.dividendsFiltered = _.filter(state.dividends, {name: payload}); 
+
+        if(state.dividendsTradingYearActive == true){
+            state.dividendsFiltered = _.filter(state.dividendsTradingYear, {name: payload}); 
+        }
+        else {
+            state.dividendsFiltered = _.filter(state.dividends, {name: payload}); 
+        }
+        
         state.dividendsFilterActive = true;
+
+
+    },
+    'FILTER_DIVIDEND_TRADING_YEAR'(state, payload){
+        state.dividendsTradingYear = _.filter(state.dividends, {tradingYear: Number(payload)}); 
+        state.dividendsTradingYearActive = true;
+        state.dividendsViewingTradingYear = payload;
     },
     'REMOVE_FILTER_DIVIDENDS'(state){
         state.dividendsFiltered = [];
         state.dividendsFilterActive = false;
+    },
+    'SHOW_ALL_INVOICES'(state){
+        state.dividendsTradingYearActive = false;
     },
     //gets the expense types and number of items in each type
     'SET_DIVIDEND_NAMES' (state, payload) {
@@ -35,12 +51,29 @@ const mutations = {
         
         var array_elements = []
         var types = []
+        var dividends
 
-        payload.forEach(function(payload){
-            var x = payload.name;
+        if (state.dividendsTradingYearActive === true){
+            dividends = state.dividendsTradingYear
+        }
+        else {
+            dividends = state.dividends
+        }
+
+        state.dividendNames = []
+
+        
+        state.dividends.forEach(function(payload){
+            let x = payload.name;
+            state.dividendNames.push(x);
+            state.dividendNames = _.uniq(state.dividendNames);
+        });  
+        dividends.forEach(function(payload){
+            let x = payload.name;
             array_elements.push(x);
-        });        
-         
+        });  
+
+
         array_elements.sort();
 		
         var current = null;
@@ -71,8 +104,8 @@ const actions = {
     setDividends: ({commit}, payload) => {
         commit('SET_DIVIDENDS', payload);
     },
-    setFilteredDividends: ({commit}, payload) => {
-        commit('SET_FILTERED_DIVIDENDS', payload);
+    filterDividendTradingYear: ({commit}, payload) => {
+        commit('FILTER_DIVIDEND_TRADING_YEAR', payload)
     },
     filterByDividendName: ({commit}, payload) => {
         commit('FILTER_DIVIDEND_NAME', payload)
@@ -82,6 +115,9 @@ const actions = {
     },
     setDividendNames: ({commit}, payload) => {
         commit('SET_DIVIDEND_NAMES', payload)
+    },
+    showAllDividends: ({commit}) => {
+        commit('SHOW_ALL_INVOICES')
     }
 };
 
@@ -92,6 +128,9 @@ const getters = {
     },
     dividendsFiltered: state => {
        return state.dividendsFiltered
+    },
+    dividendsViewingTradingYear: state => {
+        return state.dividendsViewingTradingYear
     },
     //returns an array only of expense amounts
     dividendAmountsAry: state => {
@@ -123,7 +162,29 @@ const getters = {
     },
     dividendsFilterActive: state => {
         return state.dividendsFilterActive
-    }
+    },
+
+    dividendsTradingYear: state => {
+        console.log('div trading year', state.dividendsTradingYear)
+        return state.dividendsTradingYear
+    },
+    dividendsTradingYearActive: state => {
+        return state.dividendsTradingYearActive
+    },
+
+    //returns an array only of invoice amounts
+    tradingYearDividendAmountsAry: state => {
+        const dividendsFiltered = state.dividendsTradingYear
+        let dividendsOnly = [];
+       
+        dividendsFiltered.forEach(function(dividendsFiltered){
+            var x = dividendsFiltered.dividend;
+            dividendsOnly.push(x);
+        });
+        
+        return dividendsOnly
+    },
+
 };
 
 export default {

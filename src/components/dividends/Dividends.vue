@@ -1,5 +1,6 @@
 <template>
     <div>
+      <app-trading-year :yearFor="csvTitle"></app-trading-year>
       <el-table :data="tableData" empty-text="No data to display" :default-sort = "{prop: 'date', order: 'descending'}" style="width: 100%">
         <el-table-column prop="date" label="Date" width="180">
         </el-table-column>
@@ -34,7 +35,7 @@
     import {addDecimals} from '../../lib/decimal-operations'
     import csvDownload from '../csvdownloader/csvDownload.vue'
     import getDividends from '../mixins'
-    
+    import selectTradingYear from '../tradingYear/selectTradingYear.vue'
 
     export default {
       data() {
@@ -45,34 +46,49 @@
       mixins: [getDividends],
       
       components: {
-            appCsvDownload: csvDownload
+            appCsvDownload: csvDownload,
+            appTradingYear: selectTradingYear
       },
       computed: {
           tableData(){
                if (this.$store.getters.dividendsFilterActive) {
                     return this.$store.getters.dividendsFiltered
                 }
-
+                if (this.$store.getters.dividendsTradingYearActive) {
+                  
+                  return this.$store.getters.dividendsTradingYear
+                }
                 else {
                   return this.$store.getters.dividends
                 }
                 
             },
             dividendAmountsAry(){
+
+
+
+
                 let sum = 0;
                 if (this.$store.getters.dividendsFilterActive) {
                     
                     sum = this.$store.getters.filteredDividendAmountsAry;
                 }
+                if (this.$store.getters.dividendsTradingYearActive) {
+                    sum = this.$store.getters.tradingYearDividendAmountsAry;
+                }
                 else {
                     sum = sum = this.$store.getters.dividendAmountsAry;
                 }
                 return addDecimals(sum).toFixed(2);
-            } 
+            },
+            totalYearsTrading(){
+               return this.$store.getters.totalYearsTrading
+            },
       },
       methods:{
           ...mapActions([    
-                'removeFilterDividends'
+                'removeFilterDividends',
+                'filterDividendTradingYear'
             ]),
           //format the amounts row...
           formatter(row, column){
@@ -88,6 +104,9 @@
           csvDownload(){
             downloadCSV({ filename: "dividends.csv", data: this.tableData });
           }
+      },
+      created(){
+        this.filterDividendTradingYear(this.totalYearsTrading)
       }
     }
   </script>

@@ -24,7 +24,8 @@ module.exports= {
                 'setCompanyDetails',
                 'setTradingYear',
                 'setTotalYearsTrading',
-                'filterTradingYear',
+                'filterInvoiceTradingYear',
+                'filterDividendTradingYear',
                 'setTradingYearArray'
             ]),
         
@@ -86,6 +87,11 @@ module.exports= {
 
 
               that.setDividends(dividends);
+            
+              if (that.$store.getters.dividendsTradingYearActive) {
+                that.filterDividendTradingYear(that.$store.getters.dividendsViewingTradingYear)
+              }
+
               that.setDividendNames(dividends);
           });
         },
@@ -109,7 +115,7 @@ module.exports= {
 
               /*-- get the current viewing year, not the current trading year, as this will change when you switch years --*/
               if (that.$store.getters.invoicesTradingYearActive) {
-                that.filterTradingYear(that.$store.getters.invoicesViewingTradingYear)
+                that.filterInvoiceTradingYear(that.$store.getters.invoicesViewingTradingYear)
               }
               
               that.setInvoiceCompanies();
@@ -159,9 +165,6 @@ module.exports= {
                 Had some idea about a switch statement
                 here, im sure I will remember what for!
             --*/
-
-
-
             const incorpDate = this.$store.getters.companyDetails.date
             
             //format is dd-mm-yyyy
