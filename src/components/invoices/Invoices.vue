@@ -1,10 +1,8 @@
 <template>
     <div>
       
-      <select @change="setYear" v-model="selected">
-        <option v-for="year in tradingYearsArry" v-bind:value="year">Year {{year}}</option>
-        <option value="all">Show All</option>
-      </select>
+      <app-trading-year :yearFor="csvTitle"></app-trading-year>
+    
 
       <el-table :data="tableData" empty-text="No data to display" :default-sort = "{prop: 'date', order: 'descending'}" style="width: 100%">
         <el-table-column width="40">
@@ -41,6 +39,7 @@
     import accounting from 'accounting'
     import {addDecimals} from '../../lib/decimal-operations'
     import csvDownload from '../csvdownloader/csvDownload.vue'
+    import selectTradingYear from '../tradingYear/selectTradingYear.vue'
     import getInvoices from '../mixins'
     
 
@@ -54,7 +53,8 @@
       mixins: [getInvoices],
     
       components: {
-            appCsvDownload: csvDownload
+            appCsvDownload: csvDownload,
+            appTradingYear: selectTradingYear
       },
       computed: {
           tableData(){
@@ -115,9 +115,8 @@
       methods:{
           ...mapActions([    
                 'removeFilterInvoices',
-                'filterTradingYear',
-                'setInvoiceCompanies',
-                'showAllYears'
+                'filterInvoiceTradingYear',
+        
             ]),
           //format the amounts row...
           formatter(row, column){
@@ -133,25 +132,10 @@
           csvDownload(){
             downloadCSV({ filename: "dividends.csv", data: this.tableData });
           },
-          setYear(e){
-            
-            if (e.target.value == 'all') {
-              this.removeFilterInvoices();
-              this.showAllYears();
-              this.setInvoiceCompanies();
-            }  
-            else {
-              this.removeFilterInvoices();
-              this.filterTradingYear(e.target.value);
-              this.setInvoiceCompanies();
-            }
-            
           
-        
-          },
       },
       created() {
-        this.filterTradingYear(this.totalYearsTrading)
+        this.filterInvoiceTradingYear(this.totalYearsTrading)
       }
     }
   </script>
