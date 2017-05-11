@@ -28,83 +28,79 @@
     </div>
   </template>
 
-  <script>
-    import * as firebase from 'firebase';
-    import {mapActions} from 'vuex'
-    import accounting from 'accounting'
-    import {addDecimals} from '../../lib/decimal-operations'
-    import csvDownload from '../csvdownloader/csvDownload.vue'
-    import getWages from '../mixins'
-    import selectTradingYear from '../tradingYear/selectTradingYear.vue'
+<script>
+  import * as firebase from 'firebase';
+  import {mapActions} from 'vuex'
+  import accounting from 'accounting'
+  import {addDecimals} from '../../lib/decimal-operations'
+  import csvDownload from '../csvdownloader/csvDownload.vue'
+  import getWages from '../mixins'
+  import selectTradingYear from '../tradingYear/selectTradingYear.vue'
     
+  export default {
+    data() {
+      return {
+        csvTitle: "wages"
+      }
+    },
+    mixins: [getWages],
     
-
-    export default {
-      data() {
-        return {
-          csvTitle: "wages"
+    components: {
+          appCsvDownload: csvDownload,
+          appTradingYear: selectTradingYear
+    },
+    computed: {
+        
+      tableData(){
+        if (this.$store.getters.wagesFilterActive) {
+          return this.$store.getters.wagesFiltered
         }
+        if (this.$store.getters.wagesTradingYearActive) {
+          return this.$store.getters.wagesTradingYear
+        }
+        else {
+          return this.$store.getters.wages
+        }     
       },
-      mixins: [getWages],
-      
-      components: {
-            appCsvDownload: csvDownload,
-            appTradingYear: selectTradingYear
+    wageAmountsAry(){
+        let sum = 0;
+        if (this.$store.getters.wagesFilterActive) {
+          sum = this.$store.getters.filteredWageAmountsAry;
+        }
+        else if (this.$store.getters.wagesTradingYearActive) {
+          sum = this.$store.getters.tradingYearWageAmountsAry
+        }
+        else {
+          sum = sum = this.$store.getters.wageAmountsAry;
+        }
+        return addDecimals(sum).toFixed(2);
       },
-      computed: {
-          
-          tableData(){
-               if (this.$store.getters.wagesFilterActive) {
-                    
-                    return this.$store.getters.wagesFiltered
-                }
-                if (this.$store.getters.wagesTradingYearActive) {
-                  
-                  return this.$store.getters.wagesTradingYear
-                }
-                else {
-                  
-                  return this.$store.getters.wages
-                }
-                
-            },
-            wageAmountsAry(){
-                let sum = 0;
-                if (this.$store.getters.wagesFilterActive) {
-                    
-                    sum = this.$store.getters.filteredWageAmountsAry;
-                }
-                else {
-                    sum = sum = this.$store.getters.wageAmountsAry;
-                }
-                return addDecimals(sum).toFixed(2);
-            },
-            totalYearsTrading(){
-              return this.$store.getters.totalYearsTrading
-            },
+      totalYearsTrading(){
+        return this.$store.getters.totalYearsTrading
       },
-      methods:{
-          ...mapActions([    
-                'removeFilterWages',
-                'filterWagesTradingYear'
-            ]),
-          //format the amounts row...
-          formatter(row, column){
-              var value = row.wage
-              var c = '£'
-              return accounting.formatMoney(value, c);
-          },
-          handleDelete(index, row){
-            firebase.database().ref('users/'+ this.user.uid).child('/wages/').child(row.id).remove();
-            this.removeFilterWages();
-            this.getWages();
-          },
-          csvDownload(){
-            downloadCSV({ filename: "wages.csv", data: this.tableData });
-          }
+    },
+    methods:{
+      ...mapActions([    
+          'removeFilterWages',
+          'filterWagesTradingYear'
+        ]),
+      //format the amounts row...
+      formatter(row, column){
+        var value = row.wage
+        var c = '£'
+        return accounting.formatMoney(value, c);
       },
-      created(){
-          this.filterWagesTradingYear(this.totalYearsTrading)
-       }
-    }
-  </script>
+      handleDelete(index, row){
+        firebase.database().ref('users/'+ this.user.uid).child('/wages/').child(row.id).remove();
+        this.removeFilterWages();
+        this.getWages();
+      },
+      csvDownload(){
+        downloadCSV({ filename: "wages.csv", data: this.tableData });
+      }
+    },
+    created(){
+        this.filterWagesTradingYear(this.totalYearsTrading)
+      }
+  }
+</script>

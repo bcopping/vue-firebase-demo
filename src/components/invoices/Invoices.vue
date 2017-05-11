@@ -82,7 +82,7 @@
                     
                     sum = this.$store.getters.filteredInvoiceAmountsAry;
                 }
-                if (this.$store.getters.invoicesTradingYearActive) {
+                else if (this.$store.getters.invoicesTradingYearActive) {
                     sum = this.$store.getters.tradingYearInvoiceAmountsAry;
                 }
                 else {
@@ -93,15 +93,15 @@
             invoiceAmountsVATAry(){
                 let sum = 0;
                 if (this.$store.getters.invoicesFilterActive) {
-                    
                     sum = this.$store.getters.filteredInvoiceAmountsVATAry;
                 }
-                if (this.$store.getters.invoicesTradingYearActive) {
+                else if (this.$store.getters.invoicesTradingYearActive) {
                     sum = this.$store.getters.tradingYearInvoiceAmountsVATAry;
                 }
                 else {
-                    sum = sum = this.$store.getters.invoiceAmountsVATAry;
+                    sum = this.$store.getters.invoiceAmountsVATAry;
                 }
+
                 return addDecimals(sum).toFixed(2);
             },
             totalYearsTrading(){

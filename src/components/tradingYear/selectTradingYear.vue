@@ -1,5 +1,5 @@
 <template>
-     <select @change="setYear" v-model="selected">
+     <select @change="setYear" v-model="t">
         <option v-for="year in tradingYearsArry" v-bind:value="year">Year {{year}}</option>
         <option value="all">Show All</option>
       </select>
@@ -34,6 +34,10 @@ export default {
             'filterWagesTradingYear',
             'setEmployeeNames',
             'showAllWages',
+            'removeFilterByType',
+            'filterExpensesTradingYear',
+            'setExpenseTypes',
+            'showAllExpenses',
         ]),
         setYear(e){
             switch (this.yearFor) {
@@ -53,7 +57,9 @@ export default {
                     this.setEmployeeNames();  
                     break;
                 case 'expenses':
-                
+                    this.removeFilterByType();
+                    e.target.value == 'all' ?  this.showAllExpenses() : this.filterExpensesTradingYear(e.target.value)
+                    this.setExpenseTypes();  
                     break;
             }
         },

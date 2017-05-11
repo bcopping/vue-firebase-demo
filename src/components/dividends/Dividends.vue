@@ -64,20 +64,16 @@
                 
             },
             dividendAmountsAry(){
-
-
-
-
                 let sum = 0;
                 if (this.$store.getters.dividendsFilterActive) {
                     
                     sum = this.$store.getters.filteredDividendAmountsAry;
                 }
-                if (this.$store.getters.dividendsTradingYearActive) {
+                else if (this.$store.getters.dividendsTradingYearActive) {
                     sum = this.$store.getters.tradingYearDividendAmountsAry;
                 }
                 else {
-                    sum = sum = this.$store.getters.dividendAmountsAry;
+                    sum = this.$store.getters.dividendAmountsAry;
                 }
                 return addDecimals(sum).toFixed(2);
             },

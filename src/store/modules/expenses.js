@@ -2,14 +2,13 @@ import _ from 'lodash';
 import * as firebase from 'firebase';
 
 const state = {
-   
     expenses2: [],
     expensesFiltered: [],
-    
-    expenseTypes: [
-
-    ],
+    expenseTypes: [],
     expensesFilterActive: false,
+    expensesTradingYear: [],
+    expensesTradingYearActive: false,
+    expensesViewingTradingYear: ''
 };
 
 const mutations = {
@@ -35,8 +34,23 @@ const mutations = {
         state.expensesFiltered = _.orderBy(state.expensesFiltered, [payload.orderBy], [payload.asDs]);
     },
     'FILTER_EXPENSES'(state, payload){
-        state.expensesFiltered = _.filter(state.expenses2, {type: payload}); 
+        console.log('FILTER EXPENSES PAYLOAD = ', payload);
+        if(state.expensesTradingYearActive == true){
+            state.expensesFiltered = _.filter(state.expensesTradingYear, {type: payload}); 
+        }
+        else {
+            state.expensesFiltered = _.filter(state.expenses2, {type: payload}); 
+        }
         state.expensesFilterActive = true;
+    },
+    'FILTER_EXPENSES_TRADING_YEAR'(state, payload){
+        state.expensesTradingYear = _.filter(state.expenses2, {tradingYear: Number(payload)}); 
+        
+        state.expensesTradingYearActive = true;
+        state.expensesViewingTradingYear = payload;
+    },
+    'SHOW_ALL_EXPENSES'(state){
+        state.expensesTradingYearActive = false;
     },
     'REMOVE_FILTER_EXPENSES'(state){
         state.expensesFiltered = [];
@@ -51,11 +65,29 @@ const mutations = {
         var array_elements = []
         var types = []
 
-        payload.forEach(function(payload){
-            var x = payload.type;
+        var expenses 
+
+        if (state.expensesTradingYearActive === true){
+            expenses = state.expensesTradingYear
+        }
+        else {
+            expenses = state.expenses2
+        }
+
+        state.expenseTypes = []
+
+        
+        state.expenses2.forEach(function(payload){
+            let x = payload.type;
+            state.expenseTypes.push(x);
+            state.expenseTypes = _.uniq(state.expenseTypes);
+        });  
+        expenses.forEach(function(payload){
+            let x = payload.type;
             array_elements.push(x);
-        });        
-         
+        });  
+
+
         array_elements.sort();
 		
         var current = null;
@@ -92,9 +124,7 @@ const actions = {
     deleteFilteredExpense: ({commit}, payload) => {
         commit('DELETE_FILTERED_EXPENSE', payload);
     },
-    expensesOrdering: ({commit}, payload) => {
-        commit('EXPENSE_ORDER', payload); 
-    },
+    
     filterByType: ({commit}, payload) => {
         commit('FILTER_EXPENSES', payload)
     },
@@ -103,7 +133,13 @@ const actions = {
     },
     setExpenseTypes: ({commit}, payload) => {
         commit('SET_EXPENSE_TYPES', payload)
-    }
+    },
+    filterExpensesTradingYear: ({commit}, payload) => {
+        commit('FILTER_EXPENSES_TRADING_YEAR', payload)
+    },
+    showAllExpenses: ({commit}) => {
+        commit('SHOW_ALL_EXPENSES')
+    },
 };
 
 const getters = {
@@ -170,7 +206,42 @@ const getters = {
     },
     expensesFilterActive: state => {
         return state.expensesFilterActive
-    }
+    },
+    expensesTradingYearActive: state => {
+        
+        return state.expensesTradingYearActive
+    },
+    expensesViewingTradingYear: state => {
+        return state.expensesViewingTradingYear
+    },
+    expensesTradingYear: state => {
+        
+        return state.expensesTradingYear
+    },
+    //returns an array only of invoice amounts
+    tradingYearExpenseAmountsAry: state => {
+        const expensesFiltered = state.expensesTradingYear
+        let expensesOnly = [];
+       
+        expensesFiltered.forEach(function(expensesFiltered){
+            var x = expensesFiltered.amount;
+            expensesOnly.push(x);
+        });
+        
+        return expensesOnly
+    },
+    //returns an array only of invoice amounts
+    tradingYearExpenseAmountsVATAry: state => {
+        const expensesFiltered = state.expensesTradingYear;
+        let expensesOnly = [];
+       
+        expensesFiltered.forEach(function(expensesFiltered){
+            var x = expensesFiltered.amountVAT;
+            expensesOnly.push(x);
+        });
+        
+        return expensesOnly
+    },
 };
 
 export default {

@@ -1,5 +1,6 @@
 <template>
     <div>
+      <app-trading-year :yearFor="csvTitle"></app-trading-year>
       <el-table :data="tableData" empty-text="No data to display" :default-sort = "{prop: 'date', order: 'descending'}" style="width: 100%">
         <el-table-column prop="date" label="Date" width="180">
         </el-table-column>
@@ -7,7 +8,7 @@
         </el-table-column>
         <el-table-column prop="name" label="Name" width="180">
         </el-table-column>
-        <el-table-column prop="amountVAT" label="Amt (Inc VAT)" :formatter="formatter" sortable>
+        <el-table-column prop="amountVAT" label="Amount" :formatter="formatter" sortable>
         </el-table-column>
         <el-table-column label="Operations">
           <template scope="scope">
@@ -20,7 +21,10 @@
             <td width="180">&nbsp;</td>
             <td width="180">&nbsp;</td>
             <td width="180">&nbsp;</td>
-            <td><div class="cell">{{expenseAmountsVATAry | currency('£')}}</div></td>
+            <td>
+              <div class="cell">Total excluding VAT <b>{{expenseAmountsAry | currency('£')}}</b></div>
+              <div class="cell">Total including VAT <b>{{expenseAmountsVATAry | currency('£')}}</b></div>
+            </td>
             <td>&nbsp;</td>
         </tr>
     </table>
@@ -36,7 +40,7 @@
     import {addDecimals} from '../../lib/decimal-operations'
     import csvDownload from '../csvdownloader/csvDownload.vue'
     import getExpenses from '../mixins'
-    
+    import selectTradingYear from '../tradingYear/selectTradingYear.vue'
 
     export default {
       data() {
@@ -47,24 +51,29 @@
       mixins: [getExpenses],
       
       components: {
-            appCsvDownload: csvDownload
+            appCsvDownload: csvDownload,
+            appTradingYear: selectTradingYear
       },
       computed: {
           tableData(){
             if (this.$store.getters.expensesFilterActive) {
-                    return this.$store.getters.expensesFiltered
+                  return this.$store.getters.expensesFiltered
                 }
-
-                else {
-                  return this.$store.getters.expenses2
-                }
+            if (this.$store.getters.expensesTradingYearActive) { 
+              return this.$store.getters.expensesTradingYear
+            }
+            else {
+              return this.$store.getters.expenses2
+            }
             
           },
           expenseAmountsAry(){
             let sum = 0;
             if (this.$store.getters.expensesFilterActive) {
-                
                 sum = this.$store.getters.filteredExpenseAmountsAry;
+            }
+            else if (this.$store.getters.expensesTradingYearActive) { 
+                sum = this.$store.getters.tradingYearExpenseAmountsAry;
             }
             else {
                 sum = this.$store.getters.expenseAmountsAry;
@@ -74,20 +83,26 @@
           expenseAmountsVATAry(){
             let sum = 0;
             if (this.$store.getters.expensesFilterActive) {
-                
                 sum = this.$store.getters.filteredExpenseAmountsVATAry;
+            }
+            else if (this.$store.getters.expensesTradingYearActive) {
+                sum = this.$store.getters.tradingYearExpenseAmountsVATAry
             }
             else {
                 sum = this.$store.getters.expenseAmountsVATAry;
             }
             return addDecimals(sum).toFixed(2);
-          } 
+          },
+          totalYearsTrading(){
+            return this.$store.getters.totalYearsTrading
+          },
       },
       methods:{
           ...mapActions([    
-                'expensesOrdering',
+                
                 'deleteFilteredExpense',
-                'removeFilterByType'
+                'removeFilterByType',
+                'filterExpensesTradingYear'
             ]),
           //format the amounts row...
           formatter(row, column){
@@ -103,6 +118,9 @@
           csvDownload(){
             downloadCSV({ filename: "test.csv", data: this.tableData });
           }
-      }
+      },
+      created(){
+          this.filterExpensesTradingYear(this.totalYearsTrading)
+       }
     }
   </script>

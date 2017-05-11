@@ -27,6 +27,7 @@ module.exports= {
                 'filterInvoiceTradingYear',
                 'filterDividendTradingYear',
                 'filterWagesTradingYear',
+                'filterExpensesTradingYear',
                 'setTradingYearArray'
             ]),
         
@@ -43,10 +44,11 @@ module.exports= {
                   expenses.push( expense.val() );
               });
 
-              expenses = _.orderBy(expenses, 'timestamp', ['desc']);
-
-
-              that.setExpenses2(expenses);
+            expenses = _.orderBy(expenses, 'timestamp', ['desc']);
+            that.setExpenses2(expenses);
+            if (that.$store.getters.expensesTradingYearActive) {
+                that.filterExpensesTradingYear(that.$store.getters.expensesViewingTradingYear)
+              }
               that.setExpenseTypes(expenses);
           });
         },

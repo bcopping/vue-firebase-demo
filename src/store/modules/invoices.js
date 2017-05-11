@@ -177,7 +177,7 @@ const getters = {
             var x = invoicesFiltered.amountVAT;
             invoicesOnly.push(x);
         });
-        
+        console.log('FILTERED INV AMOUNTS ARY', invoicesOnly);
         return invoicesOnly
     },
     //returns an array only of invoice amounts
@@ -192,7 +192,7 @@ const getters = {
         
         return invoicesOnly
     },
-     //returns an array only of invoice amounts
+    //returns an array only of invoice amounts
     tradingYearInvoiceAmountsVATAry: state => {
         const invoicesFiltered = state.invoicesTradingYear;
         let invoicesOnly = [];

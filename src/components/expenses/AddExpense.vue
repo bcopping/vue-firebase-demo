@@ -60,7 +60,7 @@
     import filtersOff from '../mixins'
     
     import {mapActions} from 'vuex'
-
+    
     
     
     export default {
