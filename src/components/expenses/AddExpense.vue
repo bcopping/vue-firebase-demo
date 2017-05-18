@@ -110,7 +110,7 @@
                 'setExpenses2',
                 'setExpenseTypes',
                 'setFilteredExpenses',
-                'removeFilterByType'
+                'removeFilterByExpenses'
             ]),
             expenseSelectHandler(e){
                 if(e.target.value === 'addNew') { 
@@ -153,7 +153,7 @@
                 db.child(ref).set(newData);
                
                 this.getExpenses();
-                this.removeFilterByType();
+                this.removeFilterByExpenses();
                 this.filtersOff();
 
                 //if we're adding a new expense type

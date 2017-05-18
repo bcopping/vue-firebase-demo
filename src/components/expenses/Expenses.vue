@@ -101,7 +101,7 @@
           ...mapActions([    
                 
                 'deleteFilteredExpense',
-                'removeFilterByType',
+                'removeFilterByExpenses',
                 'filterExpensesTradingYear'
             ]),
           //format the amounts row...

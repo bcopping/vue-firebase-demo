@@ -12,8 +12,6 @@
    
     import {mapActions} from 'vuex'
 
-    import _ from 'lodash'
-
     import filterType from './FilterType.vue'
     import filtersOff from '../mixins'
     
@@ -28,7 +26,7 @@
         methods:{
              ...mapActions([    
                 'filterByType',
-                'removeFilterByType'
+                'removeFilterByExpenses'
             ]),
             addFilter(e,type){
                 if(e.target.parentElement.classList.contains('active')) {
@@ -49,7 +47,7 @@
                 }
              },
             removeFilter(){
-                this.removeFilterByType();
+                this.removeFilterByExpenses();
             }
             
             
@@ -59,8 +57,4 @@
         }
 	}
 </script>
-<style>
-    .filter a {
-        cursor: pointer
-    }
-</style>
+
