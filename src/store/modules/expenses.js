@@ -1,4 +1,8 @@
-import _ from 'lodash';
+
+//var _ = require('lodash/core')
+import filter from 'lodash/filter'
+import orderBy from 'lodash/orderBy'
+import uniq from 'lodash/uniq'
 import * as firebase from 'firebase';
 
 const state = {
@@ -19,7 +23,7 @@ const mutations = {
     },
     'SET_FILTERED_EXPENSES' (state, payload) {
         state.expensesFiltered.push(payload);
-        _.orderBy(state.expensesFiltered, 'timestamp', ['desc']);
+        orderBy(state.expensesFiltered, 'timestamp', ['desc']);
     },
     'DELETE_FILTERED_EXPENSE' (state, payload) {
         var items = state.expensesFiltered
@@ -30,21 +34,21 @@ const mutations = {
         }
     },
     'EXPENSE_ORDER'(state, payload){
-        state.expenses2 = _.orderBy(state.expenses2, [payload.orderBy], [payload.asDs]);
-        state.expensesFiltered = _.orderBy(state.expensesFiltered, [payload.orderBy], [payload.asDs]);
+        state.expenses2 = orderBy(state.expenses2, [payload.orderBy], [payload.asDs]);
+        state.expensesFiltered = orderBy(state.expensesFiltered, [payload.orderBy], [payload.asDs]);
     },
     'FILTER_EXPENSES'(state, payload){
         console.log('FILTER EXPENSES PAYLOAD = ', payload);
         if(state.expensesTradingYearActive == true){
-            state.expensesFiltered = _.filter(state.expensesTradingYear, {type: payload}); 
+            state.expensesFiltered = filter(state.expensesTradingYear, {type: payload}); 
         }
         else {
-            state.expensesFiltered = _.filter(state.expenses2, {type: payload}); 
+            state.expensesFiltered = filter(state.expenses2, {type: payload}); 
         }
         state.expensesFilterActive = true;
     },
     'FILTER_EXPENSES_TRADING_YEAR'(state, payload){
-        state.expensesTradingYear = _.filter(state.expenses2, {tradingYear: Number(payload)}); 
+        state.expensesTradingYear = filter(state.expenses2, {tradingYear: Number(payload)}); 
         
         state.expensesTradingYearActive = true;
         state.expensesViewingTradingYear = payload;
@@ -80,7 +84,7 @@ const mutations = {
         state.expenses2.forEach(function(payload){
             let x = payload.type;
             state.expenseTypes.push(x);
-            state.expenseTypes = _.uniq(state.expenseTypes);
+            state.expenseTypes = uniq(state.expenseTypes);
         });  
         expenses.forEach(function(payload){
             let x = payload.type;
@@ -128,7 +132,7 @@ const actions = {
     filterByType: ({commit}, payload) => {
         commit('FILTER_EXPENSES', payload)
     },
-    removeFilterByType: ({commit}) => {
+    removeFilterByExpenses: ({commit}) => {
         commit('REMOVE_FILTER_EXPENSES');
     },
     setExpenseTypes: ({commit}, payload) => {

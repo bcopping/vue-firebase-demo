@@ -1,5 +1,9 @@
 
-import _ from 'lodash';
+
+//var _ = require('lodash/core')
+import filter from 'lodash/filter'
+import uniq from 'lodash/uniq'
+
 import * as firebase from 'firebase';
 
 const state = {
@@ -21,16 +25,16 @@ const mutations = {
     },
     'FILTER_INVOICE_COMPANY'(state, payload){
         if(state.invoicesTradingYearActive == true){
-            state.invoicesFiltered = _.filter(state.invoicesTradingYear, {company: payload}); 
+            state.invoicesFiltered = filter(state.invoicesTradingYear, {company: payload}); 
         }
         else {
-            state.invoicesFiltered = _.filter(state.invoices, {company: payload}); 
+            state.invoicesFiltered = filter(state.invoices, {company: payload}); 
         }
         
         state.invoicesFilterActive = true;
     },
     'FILTER_INVOICE_TRADING_YEAR'(state, payload){
-        state.invoicesTradingYear = _.filter(state.invoices, {tradingYear: Number(payload)}); 
+        state.invoicesTradingYear = filter(state.invoices, {tradingYear: Number(payload)}); 
         state.invoicesTradingYearActive = true;
         state.invoicesViewingTradingYear = payload;
         console.log('viewing YEAR ---', state.invoicesViewingTradingYear);
@@ -64,7 +68,7 @@ const mutations = {
         state.invoices.forEach(function(payload){
             let x = payload.company;
             state.companies.push(x);
-            state.companies = _.uniq(state.companies);
+            state.companies = uniq(state.companies);
         });  
         invoices.forEach(function(payload){
             let x = payload.company;

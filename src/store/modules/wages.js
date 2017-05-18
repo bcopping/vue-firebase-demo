@@ -1,5 +1,8 @@
-import _ from 'lodash';
 import * as firebase from 'firebase';
+
+
+import filter from 'lodash/filter'
+import uniq from 'lodash/uniq'
 
 const state = {
     wages: [],
@@ -18,16 +21,12 @@ const mutations = {
         state.wages = payload;
        console.log('STATE WAGES = ', state.wages);
     },
-    'SET_FILTERED_WAGES' (state, payload) {
-        state.wagesFiltered.push(payload);
-        _.orderBy(state.wagesFiltered, 'timestamp', ['desc']);
-    },
     'FILTER_NAME'(state, payload){
         if(state.wagesTradingYearActive == true){
-            state.wagesFiltered = _.filter(state.wagesTradingYear, {name: payload}); 
+            state.wagesFiltered = filter(state.wagesTradingYear, {name: payload}); 
         }
         else {
-            state.wagesFiltered = _.filter(state.wages, {name: payload});
+            state.wagesFiltered = filter(state.wages, {name: payload});
         }
 
         state.wagesFilterActive = true;
@@ -35,7 +34,7 @@ const mutations = {
     'FILTER_WAGES_TRADING_YEAR'(state, payload){
         console.log('FILTER WAGES TRADING YEAR', payload);
         console.log(payload);
-        state.wagesTradingYear = _.filter(state.wages, {tradingYear: Number(payload)}); 
+        state.wagesTradingYear = filter(state.wages, {tradingYear: Number(payload)}); 
         console.log(state.wagesTradingYear);
         state.wagesTradingYearActive = true;
         state.wagesViewingTradingYear = payload;
@@ -70,25 +69,13 @@ const mutations = {
         state.wages.forEach(function(payload){
             let x = payload.name;
             state.employeeNames.push(x);
-            state.employeeNames = _.uniq(state.employeeNames);
+            state.employeeNames = uniq(state.employeeNames);
         });  
         wages.forEach(function(payload){
             let x = payload.name;
             array_elements.push(x);
         });  
-
-
-
-
-
-
-
-
-
-
-
-
-         
+        
         array_elements.sort();
 		
         var current = null;
@@ -118,9 +105,6 @@ const mutations = {
 const actions = {
     setWages: ({commit}, payload) => {
         commit('SET_WAGES', payload);
-    },
-    setFilteredWages: ({commit}, payload) => {
-        commit('SET_FILTERED_WAGES', payload);
     },
     filterByName: ({commit}, payload) => {
         commit('FILTER_NAME', payload)
