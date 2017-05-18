@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import * as firebase from 'firebase';
 
 const state = {
