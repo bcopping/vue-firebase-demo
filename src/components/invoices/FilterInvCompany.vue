@@ -1,19 +1,12 @@
 <template>
-   
-                    
-        <li class="filter">
-            <a @click="addFilter($event, name.company)">{{name.company}} <span class="badge">{{name.count}}</span></a>
-        </li>
-
-            
+    <li class="filter">
+        <a @click="addFilter($event, name.company)">{{name.company}} <span class="badge">{{name.count}}</span></a>
+    </li>
 </template>
 
 <script>
    
     import {mapActions} from 'vuex'
-
-    import _ from 'lodash'
-
     
     import filtersOff from '../mixins'
     
@@ -39,10 +32,7 @@
                     
                 }
                 else {
-                    
                     this.filtersOff();
-
-
                     e.target.parentElement.classList.add('active')
                     
                     this.filterByInvoiceCompany(name);
@@ -51,16 +41,6 @@
             removeFilter(){
                 this.removeFilterInvoices();
             }
-            
-            
-        },
-        created(){
-            //this.removeFilter();
         }
 	}
 </script>
-<style>
-    .filter a {
-        cursor: pointer
-    }
-</style>
