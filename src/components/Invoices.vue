@@ -1,7 +1,5 @@
 <template>
     <div>
-        
-
         <h2>Invoices</h2>
         <div class="row">
             <div class="col-xs-12">
@@ -16,8 +14,6 @@
         <div>
             <app-invoices :user="user"></app-invoices>
         </div>
-
-        
     </div>
 </template>
 
@@ -37,18 +33,14 @@
               
             }
         },
-        
         computed: {
             user() {
                 return this.$store.getters.user
             },
-            
             isInvoicesFiltered(){
                 return this.$store.getters.invoicesFilterActive;
-            },
-            
+            },  
         },
-        
         components: {            
             appInvoiceFilters: invoiceFilters,
             appAddInvoices: addInvoices,
@@ -56,16 +48,3 @@
         }
     }
 </script>
-<style>
-
-    .newExpenseInput {
-        opacity:0;
-        position: absolute;
-        left:-9999px;
-    }
-    .newExpenseInput.visible {
-        position: relative;
-        left: 0;
-        opacity:1;
-    }
-</style>

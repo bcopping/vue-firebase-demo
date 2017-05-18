@@ -15,8 +15,6 @@
    
     import {mapActions} from 'vuex'
 
-    import _ from 'lodash'
-
     import filterType from './FilterType.vue'
 
     
@@ -37,25 +35,3 @@
         
 	}
 </script>
-<style>
-    .actionableRow .rowActions {
-        opacity:0
-    }
-    .actionableRow:hover .rowActions {
-        opacity:1;
-        float:right;
-        cursor:pointer;
-    }
-
-    .table-striped>tbody>tr.totals {
-        background-color:#999;
-        color:#FFF;
-    }
-    .nav.nav-pills-inline {
-        padding:0;
-    }
-    .nav-pills-inline li {
-        display:inline-block;
-        float:left
-    }
-</style>

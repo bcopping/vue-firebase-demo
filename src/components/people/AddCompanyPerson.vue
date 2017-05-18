@@ -105,6 +105,4 @@
         }
     }
 </script>
-<style>
-   
-</style>
+

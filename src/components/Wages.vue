@@ -1,20 +1,16 @@
 <template>
     <div>
-        
         <h2>Wages</h2>
         <div class="row">
             <div class="col-xs-12">
                 <app-add-wages :user="user"></app-add-wages>
             </div>  
-
         </div>
-
         <div class="row">
             <div class="col-xs-12">                
                 <app-wage-filters :isWagesFiltered="isWagesFiltered"></app-wage-filters>
             </div>
         </div>
-        
         <app-wages :user="user"></app-wages>
         <hr />
         
@@ -27,8 +23,6 @@
     
     import logon from './logon/LoginButton.vue'
    
-    
-    
     import addWages from './wages/AddWage.vue'
     import wageFilters from './wages/WagesFilters.vue'
     import wages from './wages/Wages.vue'
@@ -49,8 +43,6 @@
             isWagesFiltered(){
                 return this.$store.getters.wagesFilterActive;
             },
-            
-            
         },
         
         components: {
@@ -65,16 +57,3 @@
         }
     }
 </script>
-<style>
-
-    .newExpenseInput {
-        opacity:0;
-        position: absolute;
-        left:-9999px;
-    }
-    .newExpenseInput.visible {
-        position: relative;
-        left: 0;
-        opacity:1;
-    }
-</style>

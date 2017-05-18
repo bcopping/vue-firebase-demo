@@ -155,15 +155,4 @@
         }
     }
 </script>
-<style>
-    .newShareholderInput {
-        opacity:0;
-        position: absolute;
-        left:-9999px;
-    }
-    .newShareholderInput.visible {
-        position: relative;
-        left: 0;
-        opacity:1;
-    }
-</style>
+

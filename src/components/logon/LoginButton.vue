@@ -237,10 +237,3 @@
     }
 
 </script>
-
-<style>
-.loggedOn {
-    color:green;
-}
-
-</style>

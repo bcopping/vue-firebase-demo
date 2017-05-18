@@ -11,9 +11,6 @@
 <script>
    
     import {mapActions} from 'vuex'
-
-    import _ from 'lodash'
-
     
     import filtersOff from '../mixins'
     
@@ -59,8 +56,4 @@
         }
 	}
 </script>
-<style>
-    .filter a {
-        cursor: pointer
-    }
-</style>
+

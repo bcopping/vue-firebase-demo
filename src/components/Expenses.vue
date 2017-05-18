@@ -56,16 +56,3 @@
         }
     }
 </script>
-<style>
-
-    .newExpenseInput {
-        opacity:0;
-        position: absolute;
-        left:-9999px;
-    }
-    .newExpenseInput.visible {
-        position: relative;
-        left: 0;
-        opacity:1;
-    }
-</style>
