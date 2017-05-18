@@ -1,5 +1,8 @@
 
-import _ from 'lodash';
+
+import filter from 'lodash/filter'
+import uniq from 'lodash/uniq'
+
 import * as firebase from 'firebase';
 
 const state = {
@@ -21,10 +24,10 @@ const mutations = {
     'FILTER_DIVIDEND_NAME'(state, payload){
 
         if(state.dividendsTradingYearActive == true){
-            state.dividendsFiltered = _.filter(state.dividendsTradingYear, {name: payload}); 
+            state.dividendsFiltered = filter(state.dividendsTradingYear, {name: payload}); 
         }
         else {
-            state.dividendsFiltered = _.filter(state.dividends, {name: payload}); 
+            state.dividendsFiltered = filter(state.dividends, {name: payload}); 
         }
         
         state.dividendsFilterActive = true;
@@ -32,7 +35,7 @@ const mutations = {
 
     },
     'FILTER_DIVIDEND_TRADING_YEAR'(state, payload){
-        state.dividendsTradingYear = _.filter(state.dividends, {tradingYear: Number(payload)}); 
+        state.dividendsTradingYear = filter(state.dividends, {tradingYear: Number(payload)}); 
         state.dividendsTradingYearActive = true;
         state.dividendsViewingTradingYear = payload;
     },
@@ -66,7 +69,7 @@ const mutations = {
         state.dividends.forEach(function(payload){
             let x = payload.name;
             state.dividendNames.push(x);
-            state.dividendNames = _.uniq(state.dividendNames);
+            state.dividendNames = uniq(state.dividendNames);
         });  
         dividends.forEach(function(payload){
             let x = payload.name;
