@@ -1,6 +1,9 @@
 import * as firebase from 'firebase';
 import {mapActions} from 'vuex'
 import {getDate} from '../lib/get-date'
+
+import orderBy from 'lodash/orderBy'
+
 module.exports= {
     computed: {
         company() {
@@ -44,7 +47,7 @@ module.exports= {
                   expenses.push( expense.val() );
               });
 
-            expenses = _.orderBy(expenses, 'timestamp', ['desc']);
+            expenses = orderBy(expenses, 'timestamp', ['desc']);
             that.setExpenses2(expenses);
             if (that.$store.getters.expensesTradingYearActive) {
                 that.filterExpensesTradingYear(that.$store.getters.expensesViewingTradingYear)
@@ -66,7 +69,7 @@ module.exports= {
                   wages.push( wage.val() );
               });
 
-              wages = _.orderBy(wages, 'timestamp', ['desc']);
+              wages = orderBy(wages, 'timestamp', ['desc']);
 
 
               that.setWages(wages);
@@ -89,7 +92,7 @@ module.exports= {
                   dividends.push( dividend.val() );
               });
 
-              dividends = _.orderBy(dividends, 'timestamp', ['desc']);
+              dividends = orderBy(dividends, 'timestamp', ['desc']);
 
 
               that.setDividends(dividends);
@@ -114,7 +117,7 @@ module.exports= {
                   invoices.push( invoice.val() );
               });
 
-              invoices = _.orderBy(invoices, 'timestamp', ['desc']);
+              invoices = orderBy(invoices, 'timestamp', ['desc']);
 
               
               that.setInvoices(invoices);
@@ -140,7 +143,7 @@ module.exports= {
               snapshot.forEach(function(person) {
                   people.push( person.val() );
               });
-              people = _.orderBy(people, 'timestamp', ['desc']);
+              people = orderBy(people, 'timestamp', ['desc']);
               that.setPeople(people);
               
           });
