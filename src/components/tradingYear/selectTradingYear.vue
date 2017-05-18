@@ -7,6 +7,7 @@
 
 <script>
 import {mapActions} from 'vuex'
+import filtersOff from '../mixins'
 
 export default {
     data() {
@@ -15,6 +16,7 @@ export default {
         }
     },
     props: ['yearFor'],
+    mixins: [filtersOff],
     computed: {
         tradingYearsArry(){
             return this.$store.getters.tradingYearsArry
@@ -34,7 +36,7 @@ export default {
             'filterWagesTradingYear',
             'setEmployeeNames',
             'showAllWages',
-            'removeFilterByType',
+            'removeFilterByExpenses',
             'filterExpensesTradingYear',
             'setExpenseTypes',
             'showAllExpenses',
@@ -57,11 +59,13 @@ export default {
                     this.setEmployeeNames();  
                     break;
                 case 'expenses':
-                    this.removeFilterByType();
+                    this.removeFilterByExpenses();
                     e.target.value == 'all' ?  this.showAllExpenses() : this.filterExpensesTradingYear(e.target.value)
                     this.setExpenseTypes();  
                     break;
             }
+            //this method will reset any active filter presentation state...
+            this.filtersOff();
         },
     }
 }
