@@ -1,16 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import VueResource from 'vue-resource'
+
 import VueFire from 'vuefire'
 import GSignInButton from 'vue-google-signin-button'
 
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
+import { DatePicker, Table, TableColumn, Dialog, Button, Tooltip} from 'element-ui'
+
 
 import App from './App.vue'
 import { routes } from './routes'
 import { store } from './store/store';
-import locale from 'element-ui/lib/locale/lang/en'
+import lang from 'element-ui/lib/locale/lang/en'
+import locale from 'element-ui/lib/locale'
 import accounting from 'accounting'
     
 Vue.filter('currency', function (value, c) {
@@ -18,10 +19,16 @@ Vue.filter('currency', function (value, c) {
 });
 
 Vue.use(VueRouter);
-Vue.use(VueResource);
+
 Vue.use(VueFire);
 Vue.use(GSignInButton)
-Vue.use(ElementUI, { locale })
+Vue.use(Table)
+Vue.use(DatePicker)
+Vue.use(TableColumn)
+Vue.use(Dialog)
+Vue.use(Button)
+Vue.use(Tooltip)
+locale.use(lang)
 
 const router = new VueRouter({
 	routes,
