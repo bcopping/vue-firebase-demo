@@ -1,5 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   entry: './src/main.js',
@@ -48,6 +49,11 @@ module.exports = {
     historyApiFallback: true,
     noInfo: true
   },
+  plugins: [
+    new BundleAnalyzerPlugin({
+      defaultSizes: 'gzip'
+    })
+  ],
   devtool: '#eval-source-map'
 }
 
@@ -67,6 +73,7 @@ if (process.env.NODE_ENV === 'production') {
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
-    })
+    }),
+    
   ])
 }
