@@ -10,35 +10,30 @@ const Expenses = resolve => {
 }
 
 const Wages = resolve => {
-	//webpack will recognise and require the file only if we need it
 	require.ensure(['./components/Wages.vue'], ()=>{
 		resolve(require('./components/Wages.vue'));
 	});
 }
 
 const Dividends = resolve => {
-	//webpack will recognise and require the file only if we need it
 	require.ensure(['./components/Dividends.vue'], ()=>{
 		resolve(require('./components/Dividends.vue'));
 	});
 }
 
 const Invoices = resolve => {
-	//webpack will recognise and require the file only if we need it
 	require.ensure(['./components/Invoices.vue'], ()=>{
 		resolve(require('./components/Invoices.vue'));
 	});
 }
 
 const Login = resolve => {
-	//webpack will recognise and require the file only if we need it
 	require.ensure(['./components/logon/Login.vue'], ()=>{
 		resolve(require('./components/logon/Login.vue'));
 	});
 }
 
 const Company = resolve => {
-	//webpack will recognise and require the file only if we need it
 	require.ensure(['./components/Company.vue'], ()=>{
 		resolve(require('./components/Company.vue'));
 	});
