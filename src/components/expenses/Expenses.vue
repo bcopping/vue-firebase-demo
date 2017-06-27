@@ -2,7 +2,7 @@
     <div>
       <app-trading-year :yearFor="csvTitle"></app-trading-year>
       <el-table :data="tableData" empty-text="No data to display" :default-sort = "{prop: 'date', order: 'descending'}" style="width: 100%">
-        <el-table-column prop="date" label="Date" width="180">
+        <el-table-column sortable prop="date" label="Date" width="180">
         </el-table-column>
         <el-table-column prop="type" label="Type" width="180">
         </el-table-column>
@@ -34,7 +34,7 @@
   </template>
 
   <script>
-    import * as firebase from 'firebase';
+    import * as firebase from 'firebase/app';
     import {mapActions} from 'vuex'
     import accounting from 'accounting'
     import {addDecimals} from '../../lib/decimal-operations'

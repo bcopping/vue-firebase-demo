@@ -3,7 +3,7 @@
 import filter from 'lodash/filter'
 import orderBy from 'lodash/orderBy'
 import uniq from 'lodash/uniq'
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 
 const state = {
     expenses2: [],

@@ -10,9 +10,9 @@
             <a her="#" @click="handleDelete(scope.$index, scope.row)">X</a>
           </template>
         </el-table-column>
-        <el-table-column prop="invNum" label="#" width="30">
+        <el-table-column sortable prop="invNum" label="#" width="60">
         </el-table-column>
-        <el-table-column prop="date" label="Date" width="100">
+        <el-table-column sortable prop="date" label="Date" width="100">
         </el-table-column>
         <el-table-column prop="company" label="Company" width="120">
         </el-table-column>
@@ -34,7 +34,7 @@
   </template>
 
   <script>
-    import * as firebase from 'firebase';
+    import * as firebase from 'firebase/app';
     import {mapActions} from 'vuex'
     import accounting from 'accounting'
     import {addDecimals} from '../../lib/decimal-operations'

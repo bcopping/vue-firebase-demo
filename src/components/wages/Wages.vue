@@ -29,7 +29,7 @@
   </template>
 
 <script>
-  import * as firebase from 'firebase';
+  import * as firebase from 'firebase/app';
   import {mapActions} from 'vuex'
   import accounting from 'accounting'
   import {addDecimals} from '../../lib/decimal-operations'

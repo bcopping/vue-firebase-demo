@@ -49,7 +49,7 @@
 </template>
 
 <script>
-    import * as firebase from 'firebase';
+    import * as firebase from 'firebase/app';
     import {config} from '../firebase/config.js'
     import getWages from '../mixins'
     import filtersOff from '../mixins'

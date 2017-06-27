@@ -43,7 +43,7 @@
                 <br>
                 <input type="radio" id="noVAT" value="noVAT" v-model="setVAT">
                 <label for="two">No</label>
-                £{{expenseAmountVAT}}
+                {{expenseAmountVAT | currency('£')}}
             </div>
             <button @click="addExpense" class="btn btn-default">Add</button>
         </form>            
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-    import * as firebase from 'firebase';
+    import * as firebase from 'firebase/app';
    
     import {config} from '../firebase/config.js'
     

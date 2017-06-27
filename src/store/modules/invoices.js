@@ -4,7 +4,7 @@
 import filter from 'lodash/filter'
 import uniq from 'lodash/uniq'
 
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 
 const state = {
     invoices: [],

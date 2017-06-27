@@ -19,7 +19,9 @@
 </template>
 
 <script>
-    import * as firebase from 'firebase'
+    import * as firebase from 'firebase/app'
+    import 'firebase/auth';
+    import 'firebase/database';
     import logout from './logout'
     import {mapActions} from 'vuex'
     import {config} from '../firebase/config.js'
@@ -29,6 +31,7 @@
     import addCompanyDetails from '../company/AddCompanyDetails.vue'
     
     const db = firebase.initializeApp(config).database();
+    
     let usersObj = db.ref('users');
     
     export default {
