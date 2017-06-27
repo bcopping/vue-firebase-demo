@@ -12,7 +12,7 @@
    
     import {config} from './firebase/config.js'
     
-    import logon from './logon/LoginButton.vue'
+    
    
     import companyDetails from './company/CompanyDetails.vue'
    

@@ -20,8 +20,6 @@
 <script>
    
     import {config} from './firebase/config.js'
-    
-    import logon from './logon/LoginButton.vue'
    
     import addWages from './wages/AddWage.vue'
     import wageFilters from './wages/WagesFilters.vue'

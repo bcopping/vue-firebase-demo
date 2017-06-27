@@ -18,11 +18,7 @@
 </template>
 
 <script>
-   
-    import {config} from './firebase/config.js'
     
-    import logon from './logon/LoginButton.vue'
-   
     import addDividends from './dividends/AddDividend.vue'
     import dividendFilters from './dividends/DividendsFilters.vue'
     import dividends from './dividends/Dividends.vue'

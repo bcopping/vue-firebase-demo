@@ -25,7 +25,7 @@
    
     import {config} from './firebase/config.js'
     
-    import logon from './logon/LoginButton.vue'
+    
    
     import addExpenses from './expenses/AddExpense.vue'
     import expenseFilters from './expenses/ExpenseFilters.vue'

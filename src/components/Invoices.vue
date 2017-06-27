@@ -21,7 +21,7 @@
    
     import {config} from './firebase/config.js'
     
-    import logon from './logon/LoginButton.vue'
+    
     
     import invoiceFilters from './invoices/InvoicesFilters.vue'
     import addInvoices from './invoices/AddInvoice.vue'
