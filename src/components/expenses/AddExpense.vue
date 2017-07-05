@@ -5,7 +5,7 @@
                 <el-date-picker
                 v-model="dateTEST"
                 type="date"
-                format="dd-MM-yyyy"
+                format="yyyy-MM-dd"
                 placeholder="Date"
                 ref="setDate">
                 </el-date-picker>
@@ -26,7 +26,7 @@
                     v-model="newExpenseTypeSET"
                     >
                     <option disabled value="default">Select type</option>
-                    <option v-for="type in expenseTypes" v-bind:value="type.type">{{type.type}}</option>
+                    <option v-for="type in allExpenseTypes" v-bind:value="type">{{type}}</option>
                     <option value="addNew">Add new type</option>
                 </select>
             </div>
@@ -84,6 +84,9 @@
             
             expenseTypes() {
                 return this.$store.getters.expenses2Types
+            },
+            allExpenseTypes() {
+                return this.$store.getters.allExpenses2Types
             },
             setDefaultExpenseType() {
                 return this.newExpenseTypeSET;

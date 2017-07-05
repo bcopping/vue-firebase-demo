@@ -1,10 +1,10 @@
-import * as firebase from 'firebase/app';
+import * as firebase from 'firebase/app'
 import {mapActions} from 'vuex'
 import {getDate} from '../lib/get-date'
 
 import orderBy from 'lodash/orderBy'
 
-module.exports= {
+export default {
     computed: {
         company() {
             return this.$store.getters.companyDetails
@@ -159,10 +159,12 @@ module.exports= {
               that.setCompanyDetails(snapshot.val());
               
           })
-          .then(function(){
+            .then(function(){
               
-              var todaysDate = getDate();
-              var setTotalYears = true;
+                var todaysDate = getDate();
+                var setTotalYears = true;
+                todaysDate = todaysDate.split("-").reverse().join("-");
+              
               that.getTradingYear(todaysDate, setTotalYears);
           })
           .then(function(){
@@ -188,10 +190,10 @@ module.exports= {
 
             let varDateArr;
             varDateArr = varDate.split('-');
-
-            let varDay = varDateArr[0]
+            
+            let varDay = varDateArr[2]
             let varMonth = varDateArr[1]
-            let varYear = varDateArr[2]
+            let varYear = varDateArr[0]
 
             if (incorpYear == varYear) {
                 if (setTotalYears === true) {

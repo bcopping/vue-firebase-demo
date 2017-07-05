@@ -5,7 +5,7 @@
                 <el-date-picker
                 v-model="dateTEST"
                 type="date"
-                format="dd-MM-yyyy"
+                format="yyyy-MM-dd"
                 placeholder="Date"
                 ref="setDate">
                 </el-date-picker>
