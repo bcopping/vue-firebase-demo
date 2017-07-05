@@ -1,6 +1,6 @@
 {
   "presets": [
-    ["es2015", { "modules": false }],
+    ["env", { "modules": false }],
     ["stage-2"]
     
   ],
@@ -9,5 +9,11 @@
       "libraryName": "element-ui",
       "styleLibraryName": "theme-default"
     }
-  ]]]
+  ]],"transform-runtime"],
+  "env": {
+    "test": {
+      "presets": ["env", "stage-2"],
+      "plugins": [ "istanbul" ]
+    }
+  }
 }
