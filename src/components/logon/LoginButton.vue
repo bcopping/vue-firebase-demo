@@ -7,7 +7,7 @@
             >
             <button class="btn btn-secondary">Sign in with Google</button>
         </g-signin-button>
-        <p>{{test}}</p>
+        
         <el-dialog title="Company Details" v-model="addCompanyModal" size="small">
             <span>Company Details</span>
             <app-add-company-details></app-add-company-details>
@@ -26,7 +26,7 @@
     import {mapActions} from 'vuex'
     import {config} from '../firebase/config.js'
     import getCompanyDetails from '../mixins'
-    import getTradingYear from '../mixins'
+    
     import {getDate} from '../../lib/get-date'
     import addCompanyDetails from '../company/AddCompanyDetails.vue'
     
@@ -46,7 +46,7 @@
             }
         },
         props: ['loginState'],
-        mixins: [getCompanyDetails,getTradingYear],
+        mixins: [getCompanyDetails],
         firebase: () => {
             return {
                 

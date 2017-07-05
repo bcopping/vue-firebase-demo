@@ -29,22 +29,22 @@ function convertArrayOfObjectsToCSV(args) {
     return result;
 }
 
-export const downloadCSV = function(args){
+export const downloadCSV = function (args) {
     var data, filename, link;
-        var csv = convertArrayOfObjectsToCSV({
-            data: args.data
-        });
-        if (csv == null) return;
+    var csv = convertArrayOfObjectsToCSV({
+        data: args.data
+    });
+    if (csv == null) return;
 
-        filename = args.filename || 'export.csv';
+    filename = args.filename || 'export.csv';
 
-        if (!csv.match(/^data:text\/csv/i)) {
-            csv = 'data:text/csv;charset=utf-8,' + csv;
-        }
-        data = encodeURI(csv);
+    if (!csv.match(/^data:text\/csv/i)) {
+        csv = 'data:text/csv;charset=utf-8,' + csv;
+    }
+    data = encodeURI(csv);
 
-        link = document.createElement('a');
-        link.setAttribute('href', data);
-        link.setAttribute('download', filename);
-        link.click();
+    link = document.createElement('a');
+    link.setAttribute('href', data);
+    link.setAttribute('download', filename);
+    link.click();
 }

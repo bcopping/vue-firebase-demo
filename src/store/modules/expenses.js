@@ -8,6 +8,7 @@ import * as firebase from 'firebase/app';
 const state = {
     expenses2: [],
     expensesFiltered: [],
+    allExpenseTypes: [],
     expenseTypes: [],
     expensesFilterActive: false,
     expensesTradingYear: [],
@@ -18,8 +19,7 @@ const state = {
 const mutations = {
     
     'SET_EXPENSES2' (state, payload) {
-        state.expenses2 = payload;
-       
+        state.expenses2 = payload;     
     },
     'SET_FILTERED_EXPENSES' (state, payload) {
         state.expensesFiltered.push(payload);
@@ -64,11 +64,11 @@ const mutations = {
     'SET_EXPENSE_TYPES' (state, payload) {
         
         //push all types into expeseTypesOnly
-        state.expenseTypes = [];
+        state.expenseTypes = []
+        state.allExpenseTypes = []
         
         var array_elements = []
         var types = []
-
         var expenses 
 
         if (state.expensesTradingYearActive === true){
@@ -77,15 +77,17 @@ const mutations = {
         else {
             expenses = state.expenses2
         }
-
-        state.expenseTypes = []
-
         
         state.expenses2.forEach(function(payload){
             let x = payload.type;
             state.expenseTypes.push(x);
-            state.expenseTypes = uniq(state.expenseTypes);
-        });  
+            state.allExpenseTypes.push(x);
+        });
+        
+        //ditch the duplicates...
+        state.expenseTypes = uniq(state.expenseTypes);
+        state.allExpenseTypes = uniq(state.expenseTypes);
+          
         expenses.forEach(function(payload){
             let x = payload.type;
             array_elements.push(x);
@@ -204,9 +206,13 @@ const getters = {
         
         return expensesOnly
     },
-    //returns an array of expense types only
+    //returns an array of expense types by trading year, used for filtering types by year
     expenses2Types: state => {
         return state.expenseTypes
+    },
+    //returns an array of all expense types
+    allExpenses2Types: state => {
+        return state.allExpenseTypes
     },
     expensesFilterActive: state => {
         return state.expensesFilterActive

@@ -12,30 +12,32 @@ const state = {
     dividendsFilterActive: false,
     dividendsTradingYear: [],
     dividendsTradingYearActive: false,
-    dividendsViewingTradingYear: ''
+    dividendsViewingTradingYear: '',
+
+
 };
 
 const mutations = {
-    
+
     'SET_DIVIDENDS' (state, payload) {
         state.dividends = payload;
-       
+
     },
     'FILTER_DIVIDEND_NAME'(state, payload){
 
         if(state.dividendsTradingYearActive == true){
-            state.dividendsFiltered = filter(state.dividendsTradingYear, {name: payload}); 
+            state.dividendsFiltered = filter(state.dividendsTradingYear, {name: payload});
         }
         else {
-            state.dividendsFiltered = filter(state.dividends, {name: payload}); 
+            state.dividendsFiltered = filter(state.dividends, {name: payload});
         }
-        
+
         state.dividendsFilterActive = true;
 
 
     },
     'FILTER_DIVIDEND_TRADING_YEAR'(state, payload){
-        state.dividendsTradingYear = filter(state.dividends, {tradingYear: Number(payload)}); 
+        state.dividendsTradingYear = filter(state.dividends, {tradingYear: Number(payload)});
         state.dividendsTradingYearActive = true;
         state.dividendsViewingTradingYear = payload;
     },
@@ -48,10 +50,10 @@ const mutations = {
     },
     //gets the expense types and number of items in each type
     'SET_DIVIDEND_NAMES' (state, payload) {
-        
+
         //push all types into expeseTypesOnly
         state.dividendNames = [];
-        
+
         var array_elements = []
         var types = []
         var dividends
@@ -65,25 +67,25 @@ const mutations = {
 
         state.dividendNames = []
 
-        
+
         state.dividends.forEach(function(payload){
             let x = payload.name;
             state.dividendNames.push(x);
             state.dividendNames = uniq(state.dividendNames);
-        });  
+        });
         dividends.forEach(function(payload){
             let x = payload.name;
             array_elements.push(x);
-        });  
+        });
 
 
         array_elements.sort();
-		
+
         var current = null;
         var cnt = 0;
 
         for (var i = 0; i < array_elements.length; i++) {
-            
+
             if (array_elements[i] != current) {
                 if (cnt > 0) {
                     types.push({name:current, count:cnt})
@@ -95,11 +97,11 @@ const mutations = {
             }
         }
         if (cnt > 0) {
-            
+
             types.push({name:current, count:cnt})
         }
 
-       state.dividendNames = types; 
+       state.dividendNames = types;
     }
 };
 
@@ -125,7 +127,7 @@ const actions = {
 };
 
 const getters = {
-    
+
     dividends: state => {
        return state.dividends
     },
@@ -139,24 +141,24 @@ const getters = {
     dividendAmountsAry: state => {
         const dividends = state.dividends;
         let dividendsOnly = [];
-       
+
         dividends.forEach(function(dividends){
             var x = dividends.dividend;
             dividendsOnly.push(x);
         });
-        
+
         return dividendsOnly
     },
     //returns an array only of dividend amounts
     filteredDividendAmountsAry: state => {
         const dividendsFiltered = state.dividendsFiltered;
         let dividendsOnly = [];
-       
+
         dividendsFiltered.forEach(function(dividendsFiltered){
             var x = dividendsFiltered.dividend;
             dividendsOnly.push(x);
         });
-        
+
         return dividendsOnly
     },
     //returns an array of expense types only
@@ -179,12 +181,12 @@ const getters = {
     tradingYearDividendAmountsAry: state => {
         const dividendsFiltered = state.dividendsTradingYear
         let dividendsOnly = [];
-       
+
         dividendsFiltered.forEach(function(dividendsFiltered){
             var x = dividendsFiltered.dividend;
             dividendsOnly.push(x);
         });
-        
+
         return dividendsOnly
     },
 

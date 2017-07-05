@@ -15,15 +15,15 @@ const state = {
 };
 
 const mutations = {
-    
+
     'SET_WAGES' (state, payload) {
-        
+
         state.wages = payload;
        console.log('STATE WAGES = ', state.wages);
     },
     'FILTER_NAME'(state, payload){
         if(state.wagesTradingYearActive == true){
-            state.wagesFiltered = filter(state.wagesTradingYear, {name: payload}); 
+            state.wagesFiltered = filter(state.wagesTradingYear, {name: payload});
         }
         else {
             state.wagesFiltered = filter(state.wages, {name: payload});
@@ -34,8 +34,8 @@ const mutations = {
     'FILTER_WAGES_TRADING_YEAR'(state, payload){
         console.log('FILTER WAGES TRADING YEAR', payload);
         console.log(payload);
-        state.wagesTradingYear = filter(state.wages, {tradingYear: Number(payload)}); 
-        console.log(state.wagesTradingYear);
+        state.wagesTradingYear = filter(state.wages, {tradingYear: Number(payload)});
+        console.log('WAGES TRADING YEAR', state.wagesTradingYear);
         state.wagesTradingYearActive = true;
         state.wagesViewingTradingYear = payload;
     },
@@ -48,13 +48,13 @@ const mutations = {
     },
     //gets the expense types and number of items in each type
     'SET_EMPLOYEE_NAMES' (state, payload) {
-        
+
         //push all types into expeseTypesOnly
         state.employeeNames = [];
-        
+
         var array_elements = []
         var types = []
-        var wages 
+        var wages
 
         if (state.wagesTradingYearActive === true){
             wages = state.wagesTradingYear
@@ -65,24 +65,24 @@ const mutations = {
 
         state.employeeNames = []
 
-        
+
         state.wages.forEach(function(payload){
             let x = payload.name;
             state.employeeNames.push(x);
             state.employeeNames = uniq(state.employeeNames);
-        });  
+        });
         wages.forEach(function(payload){
             let x = payload.name;
             array_elements.push(x);
-        });  
-        
+        });
+
         array_elements.sort();
-		
+
         var current = null;
         var cnt = 0;
 
         for (var i = 0; i < array_elements.length; i++) {
-            
+
             if (array_elements[i] != current) {
                 if (cnt > 0) {
                     types.push({name:current, count:cnt})
@@ -94,11 +94,11 @@ const mutations = {
             }
         }
         if (cnt > 0) {
-            
+
             types.push({name:current, count:cnt})
         }
 
-       state.employeeNames = types; 
+       state.employeeNames = types;
     }
 };
 
@@ -121,13 +121,13 @@ const actions = {
     showAllWages: ({commit}) => {
         commit('SHOW_ALL_WAGES')
     },
-    
 
-    
+
+
 };
 
 const getters = {
-    
+
     wages: state => {
        return state.wages
     },
@@ -138,24 +138,24 @@ const getters = {
     wageAmountsAry: state => {
         const wages = state.wages;
         let wagesOnly = [];
-       
+
         wages.forEach(function(wages){
             var x = wages.wage;
             wagesOnly.push(x);
         });
-        
+
         return wagesOnly
     },
     //returns an array only of wage amounts
     filteredWageAmountsAry: state => {
         const wagesFiltered = state.wagesFiltered;
         let wagesOnly = [];
-       
+
         wagesFiltered.forEach(function(wagesFiltered){
             var x = wagesFiltered.wage;
             wagesOnly.push(x);
         });
-        
+
         return wagesOnly
     },
     //returns an array of expense types only
@@ -166,29 +166,29 @@ const getters = {
         return state.wagesFilterActive
     },
     wagesTradingYearActive: state => {
-        
+
         return state.wagesTradingYearActive
     },
     wagesViewingTradingYear: state => {
         return state.wagesViewingTradingYear
     },
     wagesTradingYear: state => {
-        
+
         return state.wagesTradingYear
     },
     //returns an array only of invoice amounts
     tradingYearWageAmountsAry: state => {
         const wagesFiltered = state.wagesTradingYear
         let wagesOnly = [];
-       
+
         wagesFiltered.forEach(function(wagesFiltered){
             var x = wagesFiltered.wage;
             wagesOnly.push(x);
         });
-        
+
         return wagesOnly
     },
-    
+
 };
 
 export default {

@@ -1,60 +1,41 @@
 <template>
-   
-                    
-        <li class="filter">
-            <a @click="addFilter($event, type.type)">{{type.type}} <span class="badge">{{type.count}}</span></a>
-        </li>
-
-            
+    <li class="filter">
+        <a @click="addFilter($event, type.type)">{{type.type}} <span class="badge">{{type.count}}</span></a>
+    </li>
 </template>
 
 <script>
-   
     import {mapActions} from 'vuex'
-
-    import filterType from './FilterType.vue'
     import filtersOff from '../mixins'
-    
+
     export default {
-		data(){
-			return {
+        data() {
+            return {
                 isActive: false
             }
-		},
+        },
         props: ['type'],
         mixins: [filtersOff],
         methods:{
-             ...mapActions([    
+                ...mapActions([    
                 'filterByType',
                 'removeFilterByExpenses'
             ]),
             addFilter(e,type){
                 if(e.target.parentElement.classList.contains('active')) {
-                    
                     e.target.parentElement.classList.remove('active')
-                    
-                    this.removeFilter();
-                    
+                    this.removeFilter()
                 }
                 else {
-                    
-                    this.filtersOff();
-
-
+                    this.filtersOff()
                     e.target.parentElement.classList.add('active')
-                    
-                    this.filterByType(type);
+                    this.filterByType(type)
                 }
              },
-            removeFilter(){
-                this.removeFilterByExpenses();
+            removeFilter() {
+                this.removeFilterByExpenses()
             }
-            
-            
-        },
-        created(){
-            //this.removeFilter();
         }
-	}
+    }
 </script>
 
