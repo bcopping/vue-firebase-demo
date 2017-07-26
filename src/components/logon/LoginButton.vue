@@ -5,16 +5,21 @@
             @success="onSignInSuccess"
             @error="onSignInError"
             >
-            <button class="btn btn-secondary">Sign in with Google</button>
+            <button class="button is-white">
+                <span class="icon">
+                    <i class="fa fa-google"></i>
+                </span>
+                <span>Sign in with Google</span>
+            </button>
         </g-signin-button>
-        
+
         <el-dialog title="Company Details" v-model="addCompanyModal" size="small">
             <span>Company Details</span>
             <app-add-company-details></app-add-company-details>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addCompanyModal = false">Cancel</el-button>
             </span>
-        </el-dialog> 
+        </el-dialog>
     </div>
 </template>
 
@@ -25,31 +30,36 @@
     import logout from './logout'
     import {mapActions} from 'vuex'
     import {config} from '../firebase/config.js'
-    import getCompanyDetails from '../mixins'
-    
+    import getExpenses from '../mixins'
+    import getWages from '../mixins'
+    import getInvoices from '../mixins'
+    import getDividends from '../mixins'
+    import getPeople from '../mixins'
+    import getTradingYear from '../mixins'
+
     import {getDate} from '../../lib/get-date'
     import addCompanyDetails from '../company/AddCompanyDetails.vue'
-    
+
     const db = firebase.initializeApp(config).database();
-    
+
     let usersObj = db.ref('users');
-    
+
     export default {
-        
+
         data() {
             return {
                 //google auth client id required for google sign in..
                 googleSignInParams: {
                     client_id: '142374137340-i7jsm29fbde3e7csgv9grn97rjvam6i9.apps.googleusercontent.com'
                 },
-                addCompanyModal: false, 
+                addCompanyModal: false,
             }
         },
         props: ['loginState'],
-        mixins: [getCompanyDetails],
+        mixins: [getWages,getPeople, getDividends, getTradingYear, getExpenses, getInvoices],
         firebase: () => {
             return {
-                
+
                 users: {
                     source: usersObj,
                     // optionally bind as an object
@@ -68,11 +78,14 @@
                 'setUser',
                 'setExpenses2',
                 'setTrading',
-                'setCompanyDetails'
+                'setCompanyDetails',
+                'setTradingYearArray',
+
             ]),
+
             onSignInSuccess (googleUser) {
                 var that = this;
-                
+
                 // We need to register an Observer on Firebase Auth to make sure auth is initialized.
                 var unsubscribe = firebase.auth().onAuthStateChanged(function(firebaseUser) {
                     unsubscribe();
@@ -110,11 +123,11 @@
                 });
             },
             onSignInError (error) {
-                // `error` contains any error occurred. 
+                // `error` contains any error occurred.
                 console.log('OH NOES', error)
             },
             isUserEqual(googleUser, firebaseUser) {
-                
+
                 if (firebaseUser) {
                     var providerData = firebaseUser.providerData;
                     for (var i = 0; i < providerData.length; i++) {
@@ -128,23 +141,21 @@
                 return false;
             },
 
-            
+
             initApp() {
                 // Auth state changes.
                 // [START authstatelistener]
                 const that = this;
                 firebase.auth().onAuthStateChanged(function(user){
-                    
+
                     if (user) {
                         const id = user.uid;
-                        
+
                         firebase.database().ref('users/'+ id).update({
                             name: user.displayName,
                             email: user.email
                         });
 
-                        //that.$firebaseRefs.users.child(id)
-                        
                         const userDetails = {
                             displayName: user.displayName,
                             email: user.email,
@@ -156,38 +167,57 @@
                         that.setLogin(true);
                         //set user details in store
                         that.setUser(userDetails);
-                        
-                        
-                        //const dbCompany = firebase.database().ref('users/'+ id).child('/company/')
-                        that.getCompanyDetails()
-                        
-                        console.log('comp details', that.$store.getters.companyDetails)
-                         if (that.$store.getters.companyDetails) {
-                            console.log(that.$store.getters.companyDetails);
-                            //redirect the user to the homepage
-                            that.$router.push({name: 'home'});
-                         }
-                        
-                        else {
-                            alert('doesnt exist');
-                            //only if we have company details should we set these in the state
-                            //otherwise we need to get user to input them...
-                            
-                            that.$router.push({name: 'company'});
-                            
-                            
-                        }
-                       
-                        
-                        
+
+                        //fetch the company details
+                        const ref = firebase.database().ref('users/'+ id).child('/company/')
+
+                        ref.once('value')
+                        .then(function(snapshot) {
+                            //set the company details
+                            that.setCompanyDetails(snapshot.val());
+
+                        })
+                        .then(function(){
+                            //
+                            console.log('company details', that.$store.getters.companyDetails.company)
+                            var todaysDate = getDate();
+                            var setTotalYears = true;
+                            todaysDate = todaysDate.split("-").reverse().join("-");
+
+                            that.getTradingYear(todaysDate, setTotalYears);
+                        })
+                        .then(function(){
+                            that.setTradingYearArray();
 
 
+                        })
+                        .then(function(){
+                            that.getInvoices();
+                            that.getWages();
+                            that.getDividends();
+                            that.getExpenses();
+                            that.getPeople();
+                        })
+                        .then(function(){
 
-                        
-                        //check for inactivity for auto logout
-                        that.setActivityTimer();
-                        
-                        
+                            if (that.$store.getters.companyDetails.company) {
+                                //alert('here')
+                                console.log(that.$store.getters.companyDetails);
+                                //redirect the user to the homepage
+                                that.$router.push({name: 'home'});
+                            }
+
+                            else {
+                                console.log('no company details so take them to the company edit page...');
+                                //only if we have company details should we set these in the state
+                                //otherwise we need to get user to input them...
+
+                                that.$router.push({name: 'company'});
+                            }
+
+                            //check for inactivity for auto logout
+                            that.setActivityTimer();
+                        });
 
                     } else {
                         //logged out user update the store, empty all the expenses and user data, redirect to logon page...
@@ -207,11 +237,11 @@
                 let i;
                 function timedLogout() {
                     clearTimer();
-                    
+
                     body.removeEventListener('mouseover', resetTimer,false);
                     body.removeEventListener('onscroll', resetTimer,false);
                     body.removeEventListener('ontouchstart', resetTimer,false);
-                    
+
                     firebase.auth().signOut().then(function() {
                         console.error('Signed Out');
                     }, function(error) {
@@ -221,18 +251,18 @@
 
                 function resetTimer() {
                     clearTimeout(t);
-                    t = setTimeout(timedLogout, 180000);   
+                    t = setTimeout(timedLogout, 180000);
                 }
 
                 function clearTimer() {
-                    clearTimeout(t); 
+                    clearTimeout(t);
                 }
 
                 body.addEventListener('mouseover', resetTimer,false);
                 body.addEventListener('onscroll', resetTimer,false);
                 body.addEventListener('ontouchstart', resetTimer,false);
             }
-            
+
         },
         created(){
             this.initApp();

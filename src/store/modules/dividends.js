@@ -21,7 +21,6 @@ const mutations = {
 
     'SET_DIVIDENDS' (state, payload) {
         state.dividends = payload;
-
     },
     'FILTER_DIVIDEND_NAME'(state, payload){
 
@@ -161,18 +160,18 @@ const getters = {
 
         return dividendsOnly
     },
-    //returns an array of expense types only
+    //returns an array of dividend names only
     dividendNames: state => {
         return state.dividendNames
     },
     dividendsFilterActive: state => {
         return state.dividendsFilterActive
     },
-
+    //current trading year
     dividendsTradingYear: state => {
-        console.log('div trading year', state.dividendsTradingYear)
         return state.dividendsTradingYear
     },
+    //true or false
     dividendsTradingYearActive: state => {
         return state.dividendsTradingYearActive
     },

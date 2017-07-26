@@ -1,36 +1,33 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col-xs-12">
-                <ul class="nav nav-pills nav-pills-inline">
-                    <app-filter-name v-for="(name, index) in employeeNames" :name="name"></app-filter-name>
-                </ul>
-                <hr>
-            </div>
+        <div class="tabs">
+            <ul>
+                <app-table-filter v-for="(data, index) in employeeNames" :filterData="data" :filtering="wages"></app-table-filter>
+            </ul>
         </div>
     </div>
 </template>
 
 <script>
-   
-    import {mapActions} from 'vuex'
-    import filterName from './FilterName.vue'
 
-    
+    import {mapActions} from 'vuex'
+
+    import tableFilter from '../TableFilter.vue'
+
     export default {
 		data(){
 			return {
-                isActive: false
+                wages: 'wages'
             }
 		},
         components: {
-            appFilterName: filterName
+            appTableFilter: tableFilter
         },
         computed: {
             employeeNames(){
                 return this.$store.getters.employeeNames
-            }            
+            }
         }
-        
+
 	}
 </script>

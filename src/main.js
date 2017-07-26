@@ -14,10 +14,14 @@ import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
 
 import accounting from 'accounting'
-    
+
+import {ServerTable, ClientTable, Event} from 'vue-tables-2';
+
 Vue.filter('currency', function (value, c) {
     return accounting.formatMoney(value, c);
 });
+
+
 
 Vue.use(VueRouter);
 
@@ -29,7 +33,7 @@ Vue.use(TableColumn)
 Vue.use(Dialog)
 Vue.use(Button)
 Vue.use(Tooltip)
-
+Vue.use(ClientTable, {}, false)
 Vue.prototype.$notify = Notification
 
 locale.use(lang)

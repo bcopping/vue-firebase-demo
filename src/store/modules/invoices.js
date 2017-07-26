@@ -21,20 +21,20 @@ const mutations = {
 
     'SET_INVOICES' (state, payload) {
         state.invoices = payload;
-       
+        console.log('STATE INV = ', state.invoices);
     },
     'FILTER_INVOICE_COMPANY'(state, payload){
         if(state.invoicesTradingYearActive == true){
-            state.invoicesFiltered = filter(state.invoicesTradingYear, {company: payload}); 
+            state.invoicesFiltered = filter(state.invoicesTradingYear, {company: payload});
         }
         else {
-            state.invoicesFiltered = filter(state.invoices, {company: payload}); 
+            state.invoicesFiltered = filter(state.invoices, {company: payload});
         }
-        
+
         state.invoicesFilterActive = true;
     },
     'FILTER_INVOICE_TRADING_YEAR'(state, payload){
-        state.invoicesTradingYear = filter(state.invoices, {tradingYear: Number(payload)}); 
+        state.invoicesTradingYear = filter(state.invoices, {tradingYear: Number(payload)});
         state.invoicesTradingYearActive = true;
         state.invoicesViewingTradingYear = payload;
         console.log('viewing YEAR ---', state.invoicesViewingTradingYear);
@@ -49,14 +49,14 @@ const mutations = {
     },
     //gets the invoice companies and number of items in each type
     'SET_INVOICE_COMPANIES' (state) {
-        
+
         //push all types into expeseTypesOnly
         state.invoicesCompanies = [];
-        
+
         let array_elements = []
         let companies = []
         var invoices
-        
+
         if (state.invoicesTradingYearActive === true){
             invoices = state.invoicesTradingYear
         }
@@ -69,19 +69,19 @@ const mutations = {
             let x = payload.company;
             state.companies.push(x);
             state.companies = uniq(state.companies);
-        });  
+        });
         invoices.forEach(function(payload){
             let x = payload.company;
             array_elements.push(x);
-        });        
-         
+        });
+
         array_elements.sort();
-		
+
         let current = null;
         let cnt = 0;
 
         for (let i = 0; i < array_elements.length; i++) {
-            
+
             if (array_elements[i] != current) {
                 if (cnt > 0) {
                     companies.push({company:current, count:cnt})
@@ -93,11 +93,11 @@ const mutations = {
             }
         }
         if (cnt > 0) {
-            
+
             companies.push({company:current, count:cnt})
         }
-       
-       state.invoicesCompanies = companies; 
+
+       state.invoicesCompanies = companies;
     }
 };
 
@@ -124,7 +124,7 @@ const actions = {
 };
 
 const getters = {
-    
+
     invoices: state => {
        return state.invoices
     },
@@ -141,71 +141,70 @@ const getters = {
     invoiceAmountsAry: state => {
         const invoices = state.invoices;
         let invoicesOnly = [];
-       
+
         invoices.forEach(function(invoices){
             var x = invoices.amount;
             invoicesOnly.push(x);
         });
-        
+
         return invoicesOnly
     },
     invoiceAmountsVATAry: state => {
         const invoices = state.invoices;
         let invoicesOnly = [];
-       
+
         invoices.forEach(function(invoices){
             var x = invoices.amountVAT;
             invoicesOnly.push(x);
         });
-        
+
         return invoicesOnly
     },
     //returns an array only of invoice amounts
     filteredInvoiceAmountsAry: state => {
         const invoicesFiltered = state.invoicesFiltered;
         let invoicesOnly = [];
-       
+
         invoicesFiltered.forEach(function(invoicesFiltered){
             var x = invoicesFiltered.amount;
             invoicesOnly.push(x);
         });
-        
+
         return invoicesOnly
     },
     //returns an array only of inv VAT amounts
     filteredInvoiceAmountsVATAry: state => {
         const invoicesFiltered = state.invoicesFiltered;
         let invoicesOnly = [];
-       
+
         invoicesFiltered.forEach(function(invoicesFiltered){
             var x = invoicesFiltered.amountVAT;
             invoicesOnly.push(x);
         });
-        console.log('FILTERED INV AMOUNTS ARY', invoicesOnly);
         return invoicesOnly
     },
     //returns an array only of invoice amounts
     tradingYearInvoiceAmountsAry: state => {
         const invoicesFiltered = state.invoicesTradingYear;
         let invoicesOnly = [];
-       
+
         invoicesFiltered.forEach(function(invoicesFiltered){
             var x = invoicesFiltered.amount;
             invoicesOnly.push(x);
         });
-        
+
         return invoicesOnly
     },
     //returns an array only of invoice amounts
     tradingYearInvoiceAmountsVATAry: state => {
         const invoicesFiltered = state.invoicesTradingYear;
         let invoicesOnly = [];
-       
+
         invoicesFiltered.forEach(function(invoicesFiltered){
             var x = invoicesFiltered.amountVAT;
             invoicesOnly.push(x);
         });
-        
+
         return invoicesOnly
     },
     //returns an array of expense types only
@@ -223,7 +222,6 @@ const getters = {
         return state.invoicesTradingYearActive
     },
     invoicesTradingYear: state => {
-        console.log('inv trading year', state.invoicesTradingYear)
         return state.invoicesTradingYear
     }
 };

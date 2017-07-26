@@ -2,16 +2,15 @@ import * as firebase from 'firebase/app';
 
 const state = {
     people: [],
-    addPersonVisible: false
-   
+    addPersonVisible: false,
 };
 
 const mutations = {
     'SET_PEOPLE' (state, payload) {
-        state.people = payload; 
+        state.people = payload;
     },
     'SET_PERSON_MODAL' (state, payload) {
-        state.addPersonVisible = payload; 
+        state.addPersonVisible = payload;
     },
 };
 
@@ -31,6 +30,9 @@ const getters = {
     },
     addPersonVisible: state => {
         return state.addPersonVisible
+    },
+    peopleSet: state => {
+        return state.peopleSet
     }
 };
 

@@ -31,16 +31,17 @@ export default {
                 'filterDividendTradingYear',
                 'filterWagesTradingYear',
                 'filterExpensesTradingYear',
-                'setTradingYearArray'
+                'setTradingYearArray',
+                'setHomeLoaded'
             ]),
-        
+
         getExpenses() {
-        
+
           const that = this;
           const ref = firebase.database().ref('users/'+ this.user.uid).child('/expenses2/')
-          
+
           var expenses = [];
-          
+
           ref.once('value')
           .then(function(snapshot) {
               snapshot.forEach(function(expense) {
@@ -57,12 +58,12 @@ export default {
         },
 
         getWages() {
-        
+
           const that = this;
           const ref = firebase.database().ref('users/'+ this.user.uid).child('/wages/')
-          
+
           var wages = [];
-          
+
           ref.once('value')
           .then(function(snapshot) {
               snapshot.forEach(function(wage) {
@@ -80,12 +81,12 @@ export default {
           });
         },
         getDividends() {
-        
+
           const that = this;
           const ref = firebase.database().ref('users/'+ this.user.uid).child('/dividends/')
-          
+
           var dividends = [];
-          
+
           ref.once('value')
           .then(function(snapshot) {
               snapshot.forEach(function(dividend) {
@@ -96,7 +97,7 @@ export default {
 
 
               that.setDividends(dividends);
-            
+
               if (that.$store.getters.dividendsTradingYearActive) {
                 that.filterDividendTradingYear(that.$store.getters.dividendsViewingTradingYear)
               }
@@ -105,12 +106,12 @@ export default {
           });
         },
         getInvoices() {
-        
+
           const that = this;
           const ref = firebase.database().ref('users/'+ this.user.uid).child('/invoices/')
-          
+
           var invoices = [];
-          
+
           ref.once('value')
           .then(function(snapshot) {
               snapshot.forEach(function(invoice) {
@@ -119,25 +120,25 @@ export default {
 
               invoices = orderBy(invoices, 'timestamp', ['desc']);
 
-              
+
               that.setInvoices(invoices);
 
               /*-- get the current viewing year, not the current trading year, as this will change when you switch years --*/
               if (that.$store.getters.invoicesTradingYearActive) {
                 that.filterInvoiceTradingYear(that.$store.getters.invoicesViewingTradingYear)
               }
-              
+
               that.setInvoiceCompanies();
           });
         },
 
         getPeople() {
-        
+
           const that = this;
           const ref = firebase.database().ref('users/'+ this.user.uid).child('/people/')
-          
+
           var people = [];
-          
+
           ref.once('value')
           .then(function(snapshot) {
               snapshot.forEach(function(person) {
@@ -145,30 +146,10 @@ export default {
               });
               people = orderBy(people, 'timestamp', ['desc']);
               that.setPeople(people);
-              
-          });
-        },
-        getCompanyDetails() {
-        
-          const that = this;
-          const ref = firebase.database().ref('users/'+ this.user.uid).child('/company/')
-          
-          ref.once('value')
-          .then(function(snapshot) {
-            
-              that.setCompanyDetails(snapshot.val());
-              
-          })
-            .then(function(){
-              
-                var todaysDate = getDate();
-                var setTotalYears = true;
-                todaysDate = todaysDate.split("-").reverse().join("-");
-              
-              that.getTradingYear(todaysDate, setTotalYears);
+
           })
           .then(function(){
-            that.setTradingYearArray();
+            that.setHomeLoaded(true)
           });
         },
         getTradingYear(varDate, setTotalYears){
@@ -177,27 +158,27 @@ export default {
                 here, im sure I will remember what for!
             --*/
             const incorpDate = this.$store.getters.companyDetails.date
-            
+
             //format is dd-mm-yyyy
             let year = '';
-            
+
             let incorpDateArr;
             incorpDateArr = incorpDate.split('-');
-            
+
             let incorpDay = incorpDateArr[0]
             let incorpMonth = incorpDateArr[1]
             let incorpYear = incorpDateArr[2]
 
             let varDateArr;
             varDateArr = varDate.split('-');
-            
+
             let varDay = varDateArr[2]
             let varMonth = varDateArr[1]
             let varYear = varDateArr[0]
 
             if (incorpYear == varYear) {
                 if (setTotalYears === true) {
-                    
+
                     this.setTotalYearsTrading(1);
                 }
                 else {
@@ -206,21 +187,21 @@ export default {
             }
             else if (incorpYear < varYear && varMonth < incorpMonth) {
                 if(varYear - incorpYear > 1) {
-                    
+
                     if (varMonth < incorpMonth) {
                         year = varYear - incorpYear
                     }
                     else {
                         year = varYear - incorpYear + 1
                     }
-                    
+
                     if (setTotalYears === true) {
                         this.setTotalYearsTrading(year);
                     }
                     else {
                         this.setTradingYear(year);
                     }
-                    
+
                 }
                 else {
                     if (setTotalYears === true) {
@@ -230,7 +211,7 @@ export default {
                         this.setTradingYear(1);
                     }
                 }
-                
+
             }
             else if (incorpYear < varYear && varMonth > incorpMonth) {
                 year = varYear - incorpYear + 1
@@ -273,7 +254,7 @@ export default {
             }
             //return this.$store.getters.companyDetails.date
         },
-        
+
 
         filtersOff() {
             const el = document.getElementsByClassName("filter");
@@ -282,5 +263,5 @@ export default {
             }
         },
     }
-    
+
 }

@@ -23,7 +23,7 @@ export default {
         }
     },
     methods:{
-        ...mapActions([    
+        ...mapActions([
             'removeFilterInvoices',
             'filterInvoiceTradingYear',
             'setInvoiceCompanies',
@@ -46,22 +46,32 @@ export default {
                 case 'invoices':
                     this.removeFilterInvoices();
                     e.target.value == 'all' ?  this.showAllInvoices() : this.filterInvoiceTradingYear(e.target.value)
-                    this.setInvoiceCompanies();        
+                    this.setInvoiceCompanies();
                     break;
                 case 'dividends':
                     this.removeFilterDividends();
                     e.target.value == 'all' ?  this.showAllDividends() : this.filterDividendTradingYear(e.target.value)
-                    this.setDividendNames();  
+                    this.setDividendNames();
                     break;
                 case 'wages':
                     this.removeFilterWages();
                     e.target.value == 'all' ?  this.showAllWages() : this.filterWagesTradingYear(e.target.value)
-                    this.setEmployeeNames();  
+                    this.setEmployeeNames();
                     break;
                 case 'expenses':
                     this.removeFilterByExpenses();
                     e.target.value == 'all' ?  this.showAllExpenses() : this.filterExpensesTradingYear(e.target.value)
-                    this.setExpenseTypes();  
+                    this.setExpenseTypes();
+                    break;
+                case 'corpTax':
+                    console.log('corpTax', e.target.value)
+                    /*
+                        if we're calculating corp tax we need to get all that years invoices, wages and expenses and pass them into corp
+                        tax calculator..
+                    */
+                    this.filterExpensesTradingYear(e.target.value)
+                    this.filterWagesTradingYear(e.target.value)
+                    this.filterInvoiceTradingYear(e.target.value)
                     break;
             }
             //this method will reset any active filter presentation state...

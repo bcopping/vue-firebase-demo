@@ -8,16 +8,20 @@ const state = {
     tradingYearsArry: [],
     firstTaxYear: '',
     selectTaxYear: [],
-
+    homeLoaded: false,
+    editCompany: false,
 };
 
 const mutations = {
     'SET_COMPANY_DETAILS' (state, payload) {
         state.companyDetails = payload;
-
-
+    },
+    'SET_HOME_LOADED' (state, payload) {
+        state.homeLoaded = payload;
+        console.log('LOADED STATE', state.homeLoaded)
     },
     'SET_TRADING_YEAR' (state, payload){
+        alert(payload);
         state.tradingYear = payload
 
     },
@@ -32,23 +36,17 @@ const mutations = {
         //simple array structure [1, 2, 3] etc...
 
         state.selectTaxYear = [];
-        /*
-        create an array of objects to use for filtering tax years in forcasting
-        {
-            year: 1,
-            taxYear: '2015/2016'
-        },
-        {
-            year: 2,
-            taxYear: '2016/2017'
-        }
-        */
+
+
 
         const d = state.companyDetails.date.split("-")
-
+        /*
+            if incorp month is after apr first then tax year should be the same as incorp year
+        */
         if(d[1] > 4) {
             state.firstTaxYear = parseInt(d[2]) - 1
         }
+        //else set first tax year to the year before
         else {
             state.firstTaxYear = parseInt(d[2]) - 2
         }
@@ -56,8 +54,14 @@ const mutations = {
         let i = 1;
         for (i = 1; i <= state.totalYearsTrading; i++) {
             state.tradingYearsArry.push(i);
+        }
+
+        for (i = 1; i <= state.totalYearsTrading + 1; i++) {
             state.selectTaxYear.push({year: i, taxYear: state.firstTaxYear + i });
         }
+    },
+    'SET_EDIT_COMPANY' (state, payload) {
+        state.editCompany = payload
     }
 
 };
@@ -75,6 +79,13 @@ const actions = {
     },
     setTotalYearsTrading: ({commit}, payload) => {
         commit('SET_TOTAL_YEARS_TRADING', payload);
+    },
+    setHomeLoaded: ({commit}, payload) => {
+        console.log('set home loaded', payload)
+        commit('SET_HOME_LOADED', payload)
+    },
+    setEditCompany: ({commit}, payload) => {
+        commit('SET_EDIT_COMPANY', payload);
     }
 };
 
@@ -91,9 +102,19 @@ const getters = {
     tradingYearsArry: state => {
         return state.tradingYearsArry
     },
+    selectTaxYear: state => {
+        return state.selectTaxYear
+    },
     totalYearsTrading: state => {
         return state.totalYearsTrading
+    },
+    homeLoaded: state => {
+        return state.homeLoaded
+    },
+    editCompany: state => {
+        return state.editCompany
     }
+
 };
 
 export default {
