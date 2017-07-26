@@ -1,38 +1,33 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col-xs-12">
-                <ul class="nav nav-pills nav-pills-inline">
-                    <app-filter-name v-for="(name, index) in dividendNames" :name="name"></app-filter-name>
-                </ul>
-                <hr>
-            </div>
+        <div class="tabs">
+            <ul>
+                <app-table-filter v-for="(data, index) in dividendNames" :filterData="data" :filtering="dividends"></app-table-filter>
+            </ul>
         </div>
     </div>
 </template>
 
 <script>
-   
+
     import {mapActions} from 'vuex'
+    import tableFilter from '../TableFilter.vue'
 
-    import filterName from './FilterName.vue'
-
-    
     export default {
 		data(){
 			return {
-                isActive: false
+                dividends: 'dividends'
             }
 		},
         components: {
-            appFilterName: filterName
+            appTableFilter: tableFilter
         },
         computed: {
             dividendNames(){
                 return this.$store.getters.dividendNames
-            }            
+            }
         }
-        
+
 	}
 </script>
 

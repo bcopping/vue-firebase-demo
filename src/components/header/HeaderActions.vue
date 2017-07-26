@@ -1,25 +1,22 @@
 <template>
-    
-    <ul class="nav navbar-nav navbar-right">
-        <li v-if="loginState" 
-            class="dropdown" 
-            :class="{open: isDropdownOpen}"
-            @click="toggleMenu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                <img class="avatar" :src="currentUser.photoURL"/>{{currentUser.displayName}} <span class="caret dropdown-toggle-item"></span>
+    <div>
+        <div v-if="!loginState" class="navbar-item has-dropdown is-hoverable">
+            <router-link to="/logon" tag="a" class="navbar-item" active-class="active" exact>Logon</router-link>
+        </div>
+        <div v-if="loginState" class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link is-active" href="#">
+            <img class="avatar" :src="currentUser.photoURL"/>{{currentUser.displayName}} <span class="caret dropdown-toggle-item"></span>
             </a>
-            <ul class="dropdown-menu">
-                <li><router-link to="/company" tag="a" exact>Company details</router-link></li>
-                <li><a @click="handleSignOut">sign out</a></li>
-            </ul>
-        </li>
-        
-    </ul>
-    
+            <div class="navbar-dropdown ">
+            <router-link class="navbar-item" to="/company" tag="a" exact>Company details</router-link>
+            <a class="navbar-item" @click="handleSignOut">sign out</a>
+            </div>
+        </div>
+    </div>
 </template>
 <script>
-    
-    
+
+
     import logout from '../logon/logout'
     import {mapActions} from 'vuex'
 
@@ -35,27 +32,27 @@
                 return this.$store.getters.user
             }
         },
-    
+
         methods:{
             ...mapActions([
                 'setUser',
                 'setExpenses2',
-                
+
             ]),
             handleSignOut(){
-                
+
                 logout()
-                
+
                 //reset store, incase a diff user logged in on the same browser  / machine
-                
+
 
                 this.$router.push({name: 'logon'});
-                
+
             },
             toggleMenu(e){
                 e.stopPropagation();
                 this.isDropdownOpen = !this.isDropdownOpen
-            }   
+            }
         },
         created(){
             var that = this;
@@ -68,8 +65,8 @@
 </script>
 <style>
     .avatar {
-        height:64px;
-        width:64px;
-        margin-right:10px
+        border-radius:50%;
+        margin:0 10px 0 0;
+        float:left;
     }
 </style>

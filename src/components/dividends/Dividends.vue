@@ -24,7 +24,7 @@
         </tr>
     </table>
     <app-csv-download :data="tableData" :filename="csvTitle"></app-csv-download>
-    
+
     </div>
   </template>
 
@@ -44,7 +44,7 @@
         }
       },
       mixins: [getDividends],
-      
+
       components: {
             appCsvDownload: csvDownload,
             appTradingYear: selectTradingYear
@@ -55,18 +55,18 @@
                     return this.$store.getters.dividendsFiltered
                 }
                 if (this.$store.getters.dividendsTradingYearActive) {
-                  
+
                   return this.$store.getters.dividendsTradingYear
                 }
                 else {
                   return this.$store.getters.dividends
                 }
-                
+
             },
             dividendAmountsAry(){
                 let sum = 0;
                 if (this.$store.getters.dividendsFilterActive) {
-                    
+
                     sum = this.$store.getters.filteredDividendAmountsAry;
                 }
                 else if (this.$store.getters.dividendsTradingYearActive) {
@@ -82,7 +82,7 @@
             },
       },
       methods:{
-          ...mapActions([    
+          ...mapActions([
                 'removeFilterDividends',
                 'filterDividendTradingYear'
             ]),

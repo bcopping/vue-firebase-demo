@@ -1,28 +1,29 @@
 <template>
     <div>
-        <h2>Invoices</h2>
-        <div class="row">
-            <div class="col-xs-12">
-                <app-add-invoices :user="user"></app-add-invoices>
+        <section class="hero is-fullwidth is-primary">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">Invoices</h1>
+                    <h2 class="subtitle">Create and record your company invoices</h2>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">                
-                <app-invoice-filters :isInvoicesFiltered="isInvoicesFiltered"></app-invoice-filters>
-            </div>
-        </div>
-        <div>
+        </section>
+        <div class="container">
+            <app-add-invoices :user="user"></app-add-invoices>
+
+            <app-invoice-filters :isInvoicesFiltered="isInvoicesFiltered"></app-invoice-filters>
+
             <app-invoices :user="user"></app-invoices>
         </div>
     </div>
 </template>
 
 <script>
-   
+
     import {config} from './firebase/config.js'
-    
-    
-    
+
+
+
     import invoiceFilters from './invoices/InvoicesFilters.vue'
     import addInvoices from './invoices/AddInvoice.vue'
     import invoices from './invoices/Invoices.vue'
@@ -30,7 +31,7 @@
     export default {
         data() {
             return {
-              
+
             }
         },
         computed: {
@@ -39,9 +40,9 @@
             },
             isInvoicesFiltered(){
                 return this.$store.getters.invoicesFilterActive;
-            },  
+            },
         },
-        components: {            
+        components: {
             appInvoiceFilters: invoiceFilters,
             appAddInvoices: addInvoices,
             appInvoices: invoices,

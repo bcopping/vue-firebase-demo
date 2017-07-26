@@ -1,44 +1,41 @@
 <template>
     <div>
-        <h2>Expenses</h2>
-        <div class="row">
-            <div class="col-xs-12">
-                <app-add-expenses :user="user"></app-add-expenses>
+        <section class="hero is-fullwidth is-primary">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">Expenses</h1>
+                    <h2 class="subtitle">Create company expense records</h2>
+                </div>
             </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-xs-12">                
-                <app-expense-filters :isFiltered="isFiltered"></app-expense-filters>
-            </div>
-        </div>
+        </section>
+        <div class="container">
+            <app-add-expenses :user="user"></app-add-expenses>
 
-        <div>
+            <app-expense-filters :isFiltered="isFiltered"></app-expense-filters>
+
             <app-expenses-table :user="user"></app-expenses-table>
         </div>
-       
-        
     </div>
 </template>
 
 <script>
-   
+
     import {config} from './firebase/config.js'
-    
-    
-   
+
+
+
     import addExpenses from './expenses/AddExpense.vue'
     import expenseFilters from './expenses/ExpenseFilters.vue'
     import expenses from './expenses/Expenses.vue'
-    
-    
+
+
     export default {
         data() {
             return {
-              
+
             }
         },
-        
+
         computed: {
             user() {
                 return this.$store.getters.user
@@ -47,12 +44,12 @@
                 return this.$store.getters.expensesFilterActive;
             },
         },
-        
+
         components: {
             appAddExpenses: addExpenses,
             appExpenseFilters: expenseFilters,
             appExpensesTable: expenses,
-            
+
         }
     }
 </script>

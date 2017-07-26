@@ -29,7 +29,26 @@
         </tr>
     </table>
     <app-csv-download :data="tableData" :filename="csvTitle"></app-csv-download>
-    
+    <br />
+    <br />
+    <br />
+    <br />
+
+
+    <v-client-table :data="tableData" :columns="['date', 'type', 'name', 'amountVAT', 'edit']">
+        <template slot="amountVAT" scope="props">
+            <div>
+               {{props.row.amountVAT | currency('£')}}
+
+
+            </div>
+        </template>
+        <template slot="edit" scope="props">
+            <div>
+                <a class="fa fa-trash-o" @click="edit(props.row.id)"></a>
+            </div>
+        </template>
+    </v-client-table>
     </div>
   </template>
 
@@ -42,37 +61,41 @@
     import getExpenses from '../mixins'
     import selectTradingYear from '../tradingYear/selectTradingYear.vue'
 
+
     export default {
       data() {
         return {
-          csvTitle: "expenses"
+          csvTitle: "expenses",
+          data: this.tableData
         }
       },
       mixins: [getExpenses],
-      
+
       components: {
             appCsvDownload: csvDownload,
-            appTradingYear: selectTradingYear
+            appTradingYear: selectTradingYear,
+
+
       },
       computed: {
           tableData(){
             if (this.$store.getters.expensesFilterActive) {
                   return this.$store.getters.expensesFiltered
                 }
-            if (this.$store.getters.expensesTradingYearActive) { 
+            if (this.$store.getters.expensesTradingYearActive) {
               return this.$store.getters.expensesTradingYear
             }
             else {
               return this.$store.getters.expenses2
             }
-            
+
           },
           expenseAmountsAry(){
             let sum = 0;
             if (this.$store.getters.expensesFilterActive) {
                 sum = this.$store.getters.filteredExpenseAmountsAry;
             }
-            else if (this.$store.getters.expensesTradingYearActive) { 
+            else if (this.$store.getters.expensesTradingYearActive) {
                 sum = this.$store.getters.tradingYearExpenseAmountsAry;
             }
             else {
@@ -98,8 +121,8 @@
           },
       },
       methods:{
-          ...mapActions([    
-                
+          ...mapActions([
+
                 'deleteFilteredExpense',
                 'removeFilterByExpenses',
                 'filterExpensesTradingYear'
@@ -112,7 +135,13 @@
           },
           handleDelete(index, row){
             firebase.database().ref('users/'+ this.user.uid).child('/expenses2/').child(row.id).remove();
-            this.deleteFilteredExpense(row.id)  
+            this.deleteFilteredExpense(row.id)
+            this.getExpenses();
+          },
+          edit(t){
+            console.log(t);
+            firebase.database().ref('users/'+ this.user.uid).child('/expenses2/').child(t).remove();
+            this.deleteFilteredExpense(t)
             this.getExpenses();
           },
           csvDownload(){

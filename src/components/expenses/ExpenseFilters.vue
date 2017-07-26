@@ -1,37 +1,34 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col-xs-12">
-                <ul class="nav nav-pills nav-pills-inline">
-                    <app-filter-type v-for="(type, index) in expenseTypes" :type="type"></app-filter-type>
-                </ul>
-                <hr>
-            </div>
+        <div class="tabs">
+            <ul>
+                <app-table-filter v-for="(data, index) in expenseTypes" :filterData="data" :filtering="expenses"></app-table-filter>
+            </ul>
         </div>
     </div>
 </template>
 
 <script>
-   
+
     import {mapActions} from 'vuex'
 
-    import filterType from './FilterType.vue'
 
-    
+    import tableFilter from '../TableFilter.vue'
+
     export default {
 		data(){
 			return {
-                isActive: false
+                expenses: 'expenses'
             }
 		},
         components: {
-            appFilterType: filterType  
+            appTableFilter: tableFilter
         },
         computed: {
             expenseTypes(){
                 return this.$store.getters.expenses2Types
-            }            
+            }
         }
-        
+
 	}
 </script>
