@@ -10,42 +10,41 @@
         </section>
         <div class="container">
             <app-add-invoices :user="user"></app-add-invoices>
-
-            <app-invoice-filters :isInvoicesFiltered="isInvoicesFiltered"></app-invoice-filters>
-
+            <app-filter :showFilter="showFilter" :filterObject="invoicesCompanies" filterTitle="invoices"></app-filter>
             <app-invoices :user="user"></app-invoices>
         </div>
     </div>
 </template>
 
 <script>
-
-    import {config} from './firebase/config.js'
-
-
-
-    import invoiceFilters from './invoices/InvoicesFilters.vue'
     import addInvoices from './invoices/AddInvoice.vue'
     import invoices from './invoices/Invoices.vue'
+    import filter from './filter/filter.vue'
+    import {mapActions} from 'vuex'
 
     export default {
-        data() {
-            return {
-
-            }
+         methods:{
+             ...mapActions(['removeFilterInvoices']),
+        },
+        created: function() {
+            this.removeFilterInvoices()
         },
         computed: {
             user() {
                 return this.$store.getters.user
             },
-            isInvoicesFiltered(){
-                return this.$store.getters.invoicesFilterActive;
+            invoicesCompanies(){
+                return this.$store.getters.invoicesCompanies
             },
+            showFilter(){
+                const that = this;
+                return this.$store.getters.invoicesCompanies.length > 1 ? true : false
+            }
         },
         components: {
-            appInvoiceFilters: invoiceFilters,
             appAddInvoices: addInvoices,
             appInvoices: invoices,
+            appFilter: filter,
         }
     }
 </script>

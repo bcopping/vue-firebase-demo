@@ -1,64 +1,128 @@
 <template>
     <div>
-        <form class="form-inline"  v-on:submit.prevent>
-            <div class="form-group">
-                <el-date-picker
-                v-model="invDate"
-                type="date"
-                format="yyyy-MM-dd"
-                placeholder="Date"
-                ref="setDate">
-                </el-date-picker>
+        <page-actions :section="sectionTitle" v-on:add="showAddInvoice"></page-actions>
+
+        <div class="box" v-show="addInvoice" :class="{'animated fadeIn': addInvoice}">
+            <div class="level">
+                <!-- Left side -->
+                <div class="level-left">
+                    <div class="level-item">
+                         <p class="title is-4">Add invoice detail</p>
+                    </div>
+                </div>
+                <!-- Right side -->
+                <div class="level-right">
+                    <div class="level-item">
+                        <a @click="showAddInvoice"> <span class="icon"><i class="fa fa-close"></i></span></a>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <input 
-                    placeholder="Company Name" 
-                    class="form-control newCompanyNameInput" 
-                    :class="{ visible: addCompanyName}" 
-                    type="text" 
-                    v-model="newCompanyName" 
-                    ref="newCompanyNameInput"
-                >
-                <select 
-                    class="form-control" 
-                    v-if="!addCompanyName"
-                    @change="companyNameSelectHandler"
-                    v-model="newCompanyNameSet"
-                    >
-                    <option disabled value="default">Select company</option>
-                    <option v-for="company in companies" v-bind:value="company">{{company}}</option>
-                    <option value="addNew">Add new company</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <input class="form-control" v-model="invoiceDescription" type="text" placeholder="Description">
-            </div>
-            <div class="form-group">
-                <input class="form-control" v-model="invoiceAmount" type="number" step="0.01" placeholder="0.00">
-            </div>
-            <button @click="addInvoice" class="btn btn-default">Add</button>
-            
-            <div class="form-group">
-                INC VAT £{{invoiceAmountVAT}}
-            </div>
-            
-        </form>            
+
+            <hr>
+            <br>
+            <form class="form-inline"  v-on:submit.prevent>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label for="invoiceDate" class="label">Invoice date</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-narrow">
+                            <div class="control">
+                                <datepicker :format="format" input-class="input" id="invoiceDate" placeholder="Invoice date"></datepicker>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label for="" class="label">Company</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-narrow">
+                            <div class="control">
+                                <input
+                                    placeholder="Company Name"
+                                    class="input newCompanyNameInput"
+                                    :class="{ visible: addCompanyName}"
+                                    type="text"
+                                    v-model="newCompanyName"
+                                    ref="newCompanyNameInput"
+                                >
+                                <div class="select" v-if="!addCompanyName">
+                                    <select
+                                        @change="companyNameSelectHandler"
+                                        v-model="newCompanyNameSet"
+                                        >
+                                        <option disabled value="default">Select company</option>
+                                        <option v-for="company in companies" v-bind:value="company">{{company}}</option>
+                                        <option value="addNew">Add new company</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label for="" class="label">Description</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-narrow">
+                            <div class="control">
+                                <input class="input" v-model="invoiceDescription" type="text" placeholder="Description">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label for="" class="label">Amount</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-narrow">
+                            <div class="control">
+                                <input class="input" v-model="invoiceAmount" type="number" step="0.01" placeholder="0.00"><br >
+                                INC VAT £{{invoiceAmountVAT}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <!-- Left empty for spacing -->
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <button @click="addInvoiceRecord" class="button is-primary">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </form>
+        </div>
     </div>
 </template>
 
 <script>
     import * as firebase from 'firebase/app';
-   
+
     import {config} from '../firebase/config.js'
-    
+
     import getInvoices from '../mixins'
     import getTradingYear from '../mixins'
     import filtersOff from '../mixins'
-    
+    import pageActions from '../tradingYear/PageActions.vue'
+    import Datepicker from 'vuejs-datepicker'
+    import tradingYear from '../tradingYear/selectTradingYear.vue'
     import {mapActions} from 'vuex'
 
     import {addDecimals} from '../../lib/decimal-operations'
-    
+
     export default {
         data() {
             return {
@@ -67,10 +131,17 @@
                 addCompanyName: false,
                 newCompanyName: '',
                 newCompanyNameSet: 'default',
-                invDate: ''
+                invDate: '',
+                format: 'yyyy-MM-dd',
+                sectionTitle: "invoices",
+                addInvoice: false
             }
         },
-     
+        components: {
+            Datepicker,
+            tradingYear,
+            pageActions
+        },
         mixins: [getInvoices, filtersOff],
         computed: {
             loginState() {
@@ -89,25 +160,24 @@
             companies() {
                 return this.$store.getters.companies
             },
-
-               
         },
 
-        
+
         methods:{
             ...mapActions([
                 'removeFilterInvoices'
             ]),
             companyNameSelectHandler(e){
-                if(e.target.value === 'addNew') { 
+                if(e.target.value === 'addNew') {
                     this.addCompanyName = true;
                     this.$refs.newCompanyNameInput.focus();
                 }
             },
-            
-            addInvoice(){
+
+            addInvoiceRecord(){
                 //we set which trading year the invoice goes in
-                this.getTradingYear(this.$refs.setDate.displayValue)
+                const date = document.getElementById("invoiceDate").value
+                this.getTradingYear(date)
 
                 const db = firebase.database().ref('users/'+ this.user.uid).child('/invoices/');
                 const id = db.push().key;
@@ -117,18 +187,18 @@
                     company = this.newCompanyName
                 }
                 else {
-                    company = this.newCompanyNameSet              
+                    company = this.newCompanyNameSet
                 }
-                
+
                 //get data ready to set in our firebase db ref
-                //store the key generated by firebase in this object so we can easily access the key for say delete or update methods 
+                //store the key generated by firebase in this object so we can easily access the key for say delete or update methods
                 //see delete in Expenses2.vue
                 var timestamp = Date.now();
-                
+
                 var newData = {
                     id,
                     timestamp,
-                    date: this.$refs.setDate.displayValue,
+                    date,
                     invNum: this.invNum,
                     company,
                     invoiceDescription: this.invoiceDescription,
@@ -136,9 +206,9 @@
                     amountVAT: this.invoiceAmountVAT,
                     tradingYear: this.$store.getters.tradingYear
                 };
-                
+
                 db.child(id).set(newData);
-               
+
                 this.getInvoices();
                 this.removeFilterInvoices();
                 this.filtersOff();
@@ -149,14 +219,17 @@
                     this.newCompanyNameSet = this.newCompanyName
                     //hide the manual input for company
                     this.addCompanyName = false
-                    
+
                 }
                 else {
                     this.newCompanyName = '';
                 }
 
+            },
+            showAddInvoice(){
+                this.addInvoice = !this.addInvoice
             }
-           
+
         },
         created() {
             this.getInvoices();

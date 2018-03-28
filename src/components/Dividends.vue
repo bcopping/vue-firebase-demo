@@ -10,9 +10,7 @@
         </section>
         <div class="container">
             <app-add-dividends :user="user"></app-add-dividends>
-
-            <app-dividend-filters :isDividendsFiltered="isDividendsFiltered"></app-dividend-filters>
-
+            <app-filter :showFilter="showFilter" :filterObject="dividendNames" filterTitle="dividends"></app-filter>
             <app-dividends :user="user"></app-dividends>
         </div>
 
@@ -20,36 +18,34 @@
 </template>
 
 <script>
-
+    import {mapActions} from 'vuex'
     import addDividends from './dividends/AddDividend.vue'
-    import dividendFilters from './dividends/DividendsFilters.vue'
     import dividends from './dividends/Dividends.vue'
+    import filter from './filter/filter.vue'
 
     export default {
-        data() {
-            return {
-
-            }
+        methods:{
+             ...mapActions(['removeFilterDividends']),
         },
-
+        created() {
+            this.removeFilterDividends()
+        },
         computed: {
             user() {
                 return this.$store.getters.user
             },
-
-            isDividendsFiltered(){
-                return this.$store.getters.dividendsFilterActive;
+            dividendNames(){
+                return this.$store.getters.dividendNames
             },
-
+            showFilter(){
+                const that = this;
+                return this.$store.getters.dividendNames.length > 1 ? true : false
+            }
         },
-
         components: {
-
             appAddDividends: addDividends,
-            appDividendFilters: dividendFilters,
             appDividends: dividends,
-
+            appFilter: filter,
         },
-
     }
 </script>

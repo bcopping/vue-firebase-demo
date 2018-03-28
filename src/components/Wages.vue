@@ -10,49 +10,41 @@
         </section>
         <div class="container">
             <app-add-wages :user="user"></app-add-wages>
-
-            <app-wage-filters :isWagesFiltered="isWagesFiltered"></app-wage-filters>
-
-            <app-wages :user="user"></app-wages>
+            <app-filter :showFilter="showFilter" :filterObject="employeeNames" filterTitle="wages"></app-filter>
+            <wage-table :user="user"></wage-table>
         </div>
     </div>
 </template>
 
 <script>
-
-    import {config} from './firebase/config.js'
-
+    import {mapActions} from 'vuex'
     import addWages from './wages/AddWage.vue'
-    import wageFilters from './wages/WagesFilters.vue'
-    import wages from './wages/Wages.vue'
-
+    import wageTable from './wages/Wages.vue'
+    import filter from './filter/filter.vue'
 
     export default {
-        data() {
-            return {
-
-            }
+        methods:{
+             ...mapActions(['removeFilterWages']),
         },
-
+        created() {
+            this.removeFilterWages()
+        },
         computed: {
             user() {
                 return this.$store.getters.user
             },
-
-            isWagesFiltered(){
-                return this.$store.getters.wagesFilterActive;
+            employeeNames(){
+                return this.$store.getters.employeeNames
             },
+            showFilter(){
+                const that = this;
+                return this.$store.getters.employeeNames.length > 1 ? true : false
+            }
         },
-
         components: {
             appAddWages: addWages,
-            appWageFilters: wageFilters,
-            appWages: wages,
-
-        },
-
-        created() {
-
+            appFilter: filter,
+            wageTable
         }
     }
 </script>

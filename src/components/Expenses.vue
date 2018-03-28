@@ -10,46 +10,41 @@
         </section>
         <div class="container">
             <app-add-expenses :user="user"></app-add-expenses>
-
-            <app-expense-filters :isFiltered="isFiltered"></app-expense-filters>
-
+            <app-filter :showFilter="showFilter" :filterObject="expenseTypes" filterTitle="expenses"></app-filter>
             <app-expenses-table :user="user"></app-expenses-table>
         </div>
     </div>
 </template>
 
 <script>
-
-    import {config} from './firebase/config.js'
-
-
-
+    import {mapActions} from 'vuex'
     import addExpenses from './expenses/AddExpense.vue'
-    import expenseFilters from './expenses/ExpenseFilters.vue'
     import expenses from './expenses/Expenses.vue'
-
+    import filter from './filter/filter.vue'
 
     export default {
-        data() {
-            return {
-
-            }
+        methods:{
+             ...mapActions(['removeFilterByExpenses']),
         },
-
+        created: function() {
+            this.removeFilterByExpenses()
+        },
         computed: {
             user() {
                 return this.$store.getters.user
             },
-            isFiltered(){
-                return this.$store.getters.expensesFilterActive;
+            expenseTypes(){
+                return this.$store.getters.expenses2Types
             },
+            showFilter(){
+                const that = this;
+                return this.$store.getters.expenses2Types.length > 1 ? true : false
+            }
         },
-
         components: {
             appAddExpenses: addExpenses,
-            appExpenseFilters: expenseFilters,
             appExpensesTable: expenses,
-
+            appFilter: filter,
         }
     }
 </script>

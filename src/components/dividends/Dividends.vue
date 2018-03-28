@@ -1,19 +1,18 @@
 <template>
     <div>
-      <app-trading-year :yearFor="csvTitle"></app-trading-year>
-      <el-table :data="tableData" empty-text="No data to display" :default-sort = "{prop: 'date', order: 'descending'}" style="width: 100%">
-        <el-table-column prop="date" label="Date" width="180">
-        </el-table-column>
-        <el-table-column prop="name" label="Name" width="180">
-        </el-table-column>
-        <el-table-column prop="dividend" label="Dividend" :formatter="formatter" sortable>
-        </el-table-column>
-        <el-table-column label="Operations">
-          <template scope="scope">
-            <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+     <v-client-table :data="tableData" :columns="['date', 'name', 'dividend', 'erase']" :options="options">
+        <template slot="dividend" scope="props">
+            <div>
+                {{props.row.dividend | currency('£')}}
+            </div>
+        </template>
+        <template slot="erase" scope="props">
+            <div>
+                <a class="fa fa-trash-o" @click="erase(props.row.id)"></a>
+            </div>
+        </template>
+    </v-client-table>
+
     <table class="el-table__body">
         <tr class="totals" style="width: 100%">
             <td width="180">&nbsp;</td>
@@ -40,7 +39,10 @@
     export default {
       data() {
         return {
-          csvTitle: "dividends"
+            csvTitle: "dividends",
+            options: {
+                filterable: false
+            }
         }
       },
       mixins: [getDividends],
@@ -97,6 +99,11 @@
             this.removeFilterDividends();
             this.getDividends();
           },
+          erase(t){
+            firebase.database().ref('users/'+ this.user.uid).child('/dividends/').child(t).remove();
+            this.removeFilterDividends();
+            this.getDividends();
+          },
           csvDownload(){
             downloadCSV({ filename: "dividends.csv", data: this.tableData });
           }
@@ -106,3 +113,6 @@
       }
     }
   </script>
+  <style>
+
+  </style>
