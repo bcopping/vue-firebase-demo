@@ -1,0 +1,36 @@
+// 1. Import the initial variables
+@import "~bulma/sass/utilities/initial-variables";
+
+
+.page-actions {
+    padding: 15px 0 0;
+}
+
+.VueTables__sortable {
+    cursor: pointer;
+    .VueTables__heading,
+    .VueTables__sort-icon {
+        float:left
+    }
+    .VueTables__sort-icon {
+        width:20px;
+
+    }
+    .fa-sort-up {
+        padding-top:7px;
+    }
+    .fa-sort-down {
+        padding-bottom:7px;
+    }
+}
+
+//grab the bulma lib, should split this up..
+@import '~bulma/bulma/';
+
+//animations lib
+@import "~animate.sass/scss/core";
+@import "~animate.sass/scss/slide/slideInDown";
+@import "~animate.sass/scss/fade/fadeIn";
+@import "~animate.sass/scss/fade/fadeInDown";
+@import "~animate.sass/scss/fade/fadeOutUp";
+@import "~animate.sass/scss/fade/fadeOut";

@@ -49,7 +49,6 @@
                 edit: false
             }
         },
-
         mixins: [],
         computed: {
             loginState() {
@@ -58,17 +57,11 @@
             user() {
                 return this.$store.getters.user
             }
-
-
         },
-
-
-
         methods:{
             ...mapActions([
                 'setEditCompany'
             ]),
-
 
             saveCompanyDetails(){
 

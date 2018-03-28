@@ -15,35 +15,30 @@
 </template>
 
 <script>
+  import {config} from './firebase/config.js'
+  import companyDetails from './company/CompanyDetails.vue'
 
-    import {config} from './firebase/config.js'
+  export default {
+    data() {
+        return {
 
+        }
+    },
 
+    computed: {
+        user() {
+            return this.$store.getters.user
+        }
 
-    import companyDetails from './company/CompanyDetails.vue'
+    },
 
+    components: {
 
-    export default {
-        data() {
-            return {
-
-            }
-        },
-
-        computed: {
-            user() {
-                return this.$store.getters.user
-            }
-
-        },
-
-        components: {
-
-            appCompanyDetails: companyDetails,
+        appCompanyDetails: companyDetails,
 
 
-        },
+    },
 
-    }
+  }
 </script>
 

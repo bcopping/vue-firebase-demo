@@ -1,8 +1,10 @@
 <template>
-     <select @change="setYear" v-model="t">
-        <option v-for="year in tradingYearsArry" v-bind:value="year">Year {{year}}</option>
-        <option value="all">Show All</option>
-      </select>
+    <div class="select">
+        <select @change="setYear" v-model="t">
+            <option v-for="year in tradingYearsArry" v-bind:value="year">Year {{year}}</option>
+            <option value="all">Show All</option>
+        </select>
+    </div>
 </template>
 
 <script>

@@ -28,28 +28,15 @@
     import selectTaxYear from './forecasts/selectTaxYear.vue'
     import corpTax from './forecasts/corporationTax.vue'
     export default {
-        data() {
-            return {
-
-            }
-        },
-
         computed: {
-
             homeLoaded() {
                 return this.$store.getters.homeLoaded
             }
         },
-
         components:{
             selectTaxYear,
             corpTax
         },
-        created(){
-
-
-        },
-
     }
 </script>
 <style>

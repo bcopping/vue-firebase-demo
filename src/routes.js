@@ -3,64 +3,64 @@ import Header from './components/Header.vue'
 import { store } from './store/store';
 
 const Expenses = resolve => {
-	//webpack will recognise and require the file only if we need it
-	require.ensure(['./components/Expenses.vue'], ()=>{
-		resolve(require('./components/Expenses.vue'));
-	});
+    //webpack will recognise and require the file only if we need it
+    require.ensure(['./components/Expenses.vue'], () => {
+        resolve(require('./components/Expenses.vue'));
+    });
 }
 
 const Wages = resolve => {
-	require.ensure(['./components/Wages.vue'], ()=>{
-		resolve(require('./components/Wages.vue'));
-	});
+    require.ensure(['./components/Wages.vue'], () => {
+        resolve(require('./components/Wages.vue'));
+    });
 }
 
 const Dividends = resolve => {
-	require.ensure(['./components/Dividends.vue'], ()=>{
-		resolve(require('./components/Dividends.vue'));
-	});
+    require.ensure(['./components/Dividends.vue'], () => {
+        resolve(require('./components/Dividends.vue'));
+    });
 }
 
 const Invoices = resolve => {
-	require.ensure(['./components/Invoices.vue'], ()=>{
-		resolve(require('./components/Invoices.vue'));
-	});
+    require.ensure(['./components/Invoices.vue'], () => {
+        resolve(require('./components/Invoices.vue'));
+    });
 }
 
 const Login = resolve => {
-	require.ensure(['./components/logon/Login.vue'], ()=>{
-		resolve(require('./components/logon/Login.vue'));
-	});
+    require.ensure(['./components/logon/Login.vue'], () => {
+        resolve(require('./components/logon/Login.vue'));
+    });
 }
 
 const Company = resolve => {
-	require.ensure(['./components/Company.vue'], ()=>{
-		resolve(require('./components/Company.vue'));
-	});
+    require.ensure(['./components/Company.vue'], () => {
+        resolve(require('./components/Company.vue'));
+    });
 }
 
 export const routes = [
-    
-	{ 
-        path: '', 
-        name: 'home', 
+
+    {
+        path: '',
+        name: 'home',
         components: {
-			default: Home,
-			'app-header': Header
-		},
+            default: Home,
+            'app-header': Header
+        },
         beforeEnter: (to, from, next) => {
             //if the user is logged in then go to homepage
             if (store.getters.login) {
-                
+
                 next();
             }
             else {
-                
-                next({path: 'logon'});
+
+                next({ path: 'logon' });
             }
         }
-	},
-   
+    },
+
     {
         name: 'expenses',
         path: '/expenses',
@@ -71,12 +71,12 @@ export const routes = [
         beforeEnter: (to, from, next) => {
             //if the user is logged in then go to homepage
             if (store.getters.login) {
-                
+
                 next();
             }
             else {
-                
-                next({path: 'logon'});
+
+                next({ path: 'logon' });
             }
         }
 
@@ -91,12 +91,12 @@ export const routes = [
         beforeEnter: (to, from, next) => {
             //if the user is logged in then go to homepage
             if (store.getters.login) {
-                
+
                 next();
             }
             else {
-                
-                next({path: 'logon'});
+
+                next({ path: 'logon' });
             }
         }
 
@@ -111,12 +111,12 @@ export const routes = [
         beforeEnter: (to, from, next) => {
             //if the user is logged in then go to homepage
             if (store.getters.login) {
-                
+
                 next();
             }
             else {
-                
-                next({path: 'logon'});
+
+                next({ path: 'logon' });
             }
         }
 
@@ -131,12 +131,12 @@ export const routes = [
         beforeEnter: (to, from, next) => {
             //if the user is logged in then go to homepage
             if (store.getters.login) {
-                
+
                 next();
             }
             else {
-                
-                next({path: 'logon'});
+
+                next({ path: 'logon' });
             }
         }
 
@@ -151,12 +151,12 @@ export const routes = [
         beforeEnter: (to, from, next) => {
             //if the user is logged in then go to homepage
             if (store.getters.login) {
-                
+
                 next();
             }
             else {
-                
-                next({path: 'logon'});
+
+                next({ path: 'logon' });
             }
         }
 

@@ -5,13 +5,21 @@
 
          <a href="#" @click="test">Edit</a>
 
-        <el-dialog title="Your Company" v-model="editCompanyModal" :beforeClose="handleClose" size="small">
-            <span>Please add your company details</span>
-            <app-add-company-details></app-add-company-details>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="addCompanyModal = false">Cancel</el-button>
-            </span>
-        </el-dialog>
+         <div class="modal" :class="{'is-active': editCompanyModal}">
+            <div class="modal-background" @click="handleClose"></div>
+            <div class="modal-content">
+                <div class="box">
+                    <h1>Company Details</h1>
+                    <app-add-company-details></app-add-company-details>
+                    <a @click="handleClose">Cancel</a>
+
+
+                </div>
+            </div>
+            <button @click="handleClose" class="modal-close is-large"></button>
+        </div>
+
+
     </div>
 
 </template>
@@ -25,8 +33,6 @@
 
     import addCompanyDetails from './AddCompanyDetails.vue'
 
-
-
     export default {
         data() {
             return {
@@ -38,7 +44,6 @@
         },
 
         computed: {
-
             company() {
 
                 return this.$store.getters.companyDetails
@@ -46,8 +51,6 @@
             editCompanyModal() {
                 return this.$store.getters.editCompany
             }
-
-
         },
 
         methods:{
@@ -59,18 +62,22 @@
                 that.setEditCompany(true)
 
             },
-            handleClose(done){
+            handleClose(){
+                this.addCompanyModal = false
+                this.setEditCompany(false)
 
-                 this.setEditCompany(false)
-                done();
             }
 
 
         },
         created() {
 
-           var that = this;
+
+        },
+        mounted(){
+            var that = this;
            if(!this.$store.getters.companyDetails.company) {
+
                that.setEditCompany(true)
            }
         }

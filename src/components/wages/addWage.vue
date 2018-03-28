@@ -1,48 +1,102 @@
 <template>
     <div>
-        <form class="form-inline"  v-on:submit.prevent>
-            <div class="form-group">
-                <el-date-picker
-                v-model="dateTEST"
-                type="date"
-                format="yyyy-MM-dd"
-                placeholder="Date"
-                ref="setDate">
-                </el-date-picker>
-            </div>
-            <div class="form-group">
+        <page-actions :section="csvTitle" v-on:add="showAddWage"></page-actions>
 
-                <select
-                    class="form-control"
-                    v-if="!addEmployeeName"
-                    @change="employeeSelectHandler"
-                    v-model="newEmployeeNameSet"
-                    >
-                    <option disabled value="default">Select employee</option>
-                    <option v-for="person in people" v-bind:value="{name: person.name, id: person.id} ">
-                        {{person.name}}
-                    </option>
-                    <option value="addNew">Add new employee</option>
-                </select>
-
+        <div class="box" v-show="addWage" :class="{'animated fadeIn': addWage}">
+            <div class="level">
+                <!-- Left side -->
+                <div class="level-left">
+                    <div class="level-item">
+                         <p class="title is-4">Add wage detail</p>
+                    </div>
+                </div>
+                <!-- Right side -->
+                <div class="level-right">
+                    <div class="level-item">
+                        <a @click="showAddWage"> <span class="icon"><i class="fa fa-close"></i></span></a>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <input class="form-control" v-model="wageAmount" type="number" step="0.01" placeholder="0.00">
+            <hr>
+            <br>
+            <form v-on:submit.prevent>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label for="paymentDate" class="label">Payment date</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-narrow">
+                            <div class="control">
+                                <datepicker :format="format" input-class="input" id="paymentDate" placeholder="Payment date"></datepicker>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">To</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-narrow">
+                            <div class="control">
+                                <div class="select">
+                                <select
+
+                                    v-if="!addEmployeeName"
+                                    @change="employeeSelectHandler"
+                                    v-model="newEmployeeNameSet"
+                                    >
+                                    <option disabled value="default">Select employee</option>
+                                    <option v-for="person in people" v-bind:value="{name: person.name, id: person.id} ">
+                                        {{person.name}}
+                                    </option>
+                                    <option value="addNew">Add new employee</option>
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label for="" class="label">Amount</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-narrow">
+                            <div class="control">
+                                <input class="input" v-model="wageAmount" type="number" step="0.01" placeholder="0.00">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label">
+                        <!-- Left empty for spacing -->
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <button @click="addWageRecord" class="button is-primary">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <br>
+        </div>
+
+        <div class="modal" :class="{'is-active': addEmployeeModal}">
+            <div class="modal-background" @click="addEmployeeModal = false"></div>
+            <div class="modal-content">
+                <div class="box">
+                    <h1>Enter full name</h1>
+                    <app-add-company-person :user="user"></app-add-company-person>
+                    <a @click="addEmployeeModal = false">Cancel</a>
+                </div>
             </div>
-
-            <button @click="addWage" class="btn btn-default">Add</button>
-        </form>
-
-
-
-        <el-dialog title="Add new employee" v-model="addEmployeeModal" size="small">
-            <span>Enter full name</span>
-            <app-add-company-person :user="user"></app-add-company-person>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="addEmployeeModal = false">Cancel</el-button>
-            </span>
-        </el-dialog>
+            <button @click="addEmployeeModal = false" class="modal-close is-large"></button>
+        </div>
 
     </div>
 </template>
@@ -56,6 +110,10 @@
     import addCompanyPerson from '../people/AddCompanyPerson.vue'
     import companyPersonSelect from '../people/CompanyPersonSelect.vue'
     import getTradingYear from '../mixins'
+    import Datepicker from 'vuejs-datepicker'
+    import tradingYear from '../tradingYear/selectTradingYear.vue'
+    import pageActions from '../tradingYear/PageActions.vue'
+
 
     export default {
         data() {
@@ -65,15 +123,21 @@
                 newEmployeeName: '',
                 newEmployeeNameSet: 'default',
                 nameID: '',
-                dateTEST: '',
-                addEmployeeModal: false
+                addEmployeeModal: false,
+                format: 'yyyy-MM-dd',
+                csvTitle: "wages",
+                addWage: false
 
             }
         },
 
         mixins: [getWages, filtersOff],
         components: {
-            appAddCompanyPerson: addCompanyPerson
+            appAddCompanyPerson: addCompanyPerson,
+            Datepicker,
+            tradingYear,
+            pageActions
+
         },
         computed: {
             loginState() {
@@ -105,14 +169,13 @@
                     //this.$refs.newEmployeeInput.focus();
                 }
             },
-            addWage(){
-                //we set which trading year the invoice goes in
-                this.getTradingYear(this.$refs.setDate.displayValue)
-
+            addWageRecord(){
 
                 const db = firebase.database().ref('users/'+ this.user.uid).child('/wages/');
                 const ref = db.push().key;
-                //hide the set new type of expense input field
+                const date = document.getElementById("paymentDate").value
+                //we set which trading year the invoice goes in
+                this.getTradingYear(date)
 
                 //get data ready to set in our firebase db ref
                 //store the key generated by firebase in this object so we can easily access the key for say delete or update methods
@@ -125,7 +188,7 @@
                     wage: this.wageAmount,
                     id: ref,
                     timestamp: timestamp,
-                    date: this.$refs.setDate.displayValue,
+                    date,
                     tradingYear: this.$store.getters.tradingYear
                 };
 
@@ -135,6 +198,9 @@
                 this.removeFilterWages();
                 this.filtersOff();
 
+            },
+            showAddWage(){
+                this.addWage = !this.addWage
             }
 
         },
@@ -159,14 +225,5 @@
     }
 </script>
 <style>
-    .newEmployeeInput {
-        opacity:0;
-        position: absolute;
-        left:-9999px;
-    }
-    .newEmployeeInput.visible {
-        position: relative;
-        left: 0;
-        opacity:1;
-    }
+
 </style>

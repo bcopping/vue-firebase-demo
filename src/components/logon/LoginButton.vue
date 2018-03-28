@@ -13,13 +13,6 @@
             </button>
         </g-signin-button>
 
-        <el-dialog title="Company Details" v-model="addCompanyModal" size="small">
-            <span>Company Details</span>
-            <app-add-company-details></app-add-company-details>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="addCompanyModal = false">Cancel</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 
@@ -52,7 +45,7 @@
                 googleSignInParams: {
                     client_id: '142374137340-i7jsm29fbde3e7csgv9grn97rjvam6i9.apps.googleusercontent.com'
                 },
-                addCompanyModal: false,
+
             }
         },
         props: ['loginState'],

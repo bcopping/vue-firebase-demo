@@ -1,44 +1,44 @@
 import * as firebase from 'firebase/app';
 
 const state = {
-    people: [],
-    addPersonVisible: false,
+  people: [],
+  addPersonVisible: false,
 };
 
 const mutations = {
-    'SET_PEOPLE' (state, payload) {
-        state.people = payload;
-    },
-    'SET_PERSON_MODAL' (state, payload) {
-        state.addPersonVisible = payload;
-    },
+  'SET_PEOPLE'(state, payload) {
+    state.people = payload;
+  },
+  'SET_PERSON_MODAL'(state, payload) {
+    state.addPersonVisible = payload;
+  },
 };
 
 const actions = {
-    setPeople: ({commit}, payload) => {
-        commit('SET_PEOPLE', payload);
-    },
+  setPeople: ({ commit }, payload) => {
+    commit('SET_PEOPLE', payload);
+  },
 
-    setPersonModal: ({commit}, payload) => {
-        commit('SET_PERSON_MODAL', payload);
-    },
+  setPersonModal: ({ commit }, payload) => {
+    commit('SET_PERSON_MODAL', payload);
+  },
 };
 
 const getters = {
-    people: state => {
-       return state.people
-    },
-    addPersonVisible: state => {
-        return state.addPersonVisible
-    },
-    peopleSet: state => {
-        return state.peopleSet
-    }
+  people: state => {
+    return state.people
+  },
+  addPersonVisible: state => {
+    return state.addPersonVisible
+  },
+  peopleSet: state => {
+    return state.peopleSet
+  }
 };
 
 export default {
-    state,
-    mutations,
-    actions,
-    getters
+  state,
+  mutations,
+  actions,
+  getters
 };
